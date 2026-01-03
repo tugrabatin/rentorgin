@@ -1,0 +1,73 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+*.log
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+prisma/migrations/
+
+# Logs
+logs/*.log
+*.log
+
+# Storage (uploaded files - keep structure, ignore content)
+storage/uploads/*
+!storage/uploads/.gitkeep
+storage/sessions/*
+!storage/sessions/.gitkeep
+
+# Build
+*.tsbuildinfo
+
+# Misc
+.turbo/
+.vercel/
+*.pem
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

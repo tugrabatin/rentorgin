@@ -1,0 +1,152 @@
+import { AnalyticsService } from './analytics.service';
+export declare class AnalyticsController {
+    private readonly analyticsService;
+    constructor(analyticsService: AnalyticsService);
+    getStoreAnalytics(storeId: string, filters: any): Promise<({
+        store: {
+            tenantId: string;
+            id: string;
+            status: import(".prisma/client").$Enums.StoreStatus;
+            createdAt: Date;
+            updatedAt: Date;
+            name: string;
+            code: string;
+            brand: string | null;
+            concept: string | null;
+            country: string;
+            city: string;
+            district: string | null;
+            address: string;
+            squareMeters: number;
+            openingDate: Date | null;
+            mallId: string | null;
+            closingDate: Date | null;
+        };
+    } & {
+        tenantId: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        storeId: string;
+        commonAreaCharges: number | null;
+        month: number;
+        year: number;
+        revenue: number;
+        rent: number;
+        otherExpenses: number | null;
+        rentToRevenueRatio: number;
+        revenuePerSquareMeter: number;
+        profitMargin: number | null;
+        footTraffic: number | null;
+        conversionRate: number | null;
+        performanceScore: number | null;
+        recommendation: import(".prisma/client").$Enums.PerformanceRecommendation | null;
+    })[]>;
+    getPortfolioSummary(filters: any): Promise<{
+        totalStores: number;
+        totalRevenue: number;
+        totalRent: number;
+        averageRentToRevenueRatio: number;
+        analytics: ({
+            store: {
+                tenantId: string;
+                id: string;
+                status: import(".prisma/client").$Enums.StoreStatus;
+                createdAt: Date;
+                updatedAt: Date;
+                name: string;
+                code: string;
+                brand: string | null;
+                concept: string | null;
+                country: string;
+                city: string;
+                district: string | null;
+                address: string;
+                squareMeters: number;
+                openingDate: Date | null;
+                mallId: string | null;
+                closingDate: Date | null;
+            };
+        } & {
+            tenantId: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            storeId: string;
+            commonAreaCharges: number | null;
+            month: number;
+            year: number;
+            revenue: number;
+            rent: number;
+            otherExpenses: number | null;
+            rentToRevenueRatio: number;
+            revenuePerSquareMeter: number;
+            profitMargin: number | null;
+            footTraffic: number | null;
+            conversionRate: number | null;
+            performanceScore: number | null;
+            recommendation: import(".prisma/client").$Enums.PerformanceRecommendation | null;
+        })[];
+    }>;
+    calculate(data: any): Promise<{
+        tenantId: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        storeId: string;
+        commonAreaCharges: number | null;
+        month: number;
+        year: number;
+        revenue: number;
+        rent: number;
+        otherExpenses: number | null;
+        rentToRevenueRatio: number;
+        revenuePerSquareMeter: number;
+        profitMargin: number | null;
+        footTraffic: number | null;
+        conversionRate: number | null;
+        performanceScore: number | null;
+        recommendation: import(".prisma/client").$Enums.PerformanceRecommendation | null;
+    }>;
+    compareStores(storeIds: string): Promise<({
+        store: {
+            tenantId: string;
+            id: string;
+            status: import(".prisma/client").$Enums.StoreStatus;
+            createdAt: Date;
+            updatedAt: Date;
+            name: string;
+            code: string;
+            brand: string | null;
+            concept: string | null;
+            country: string;
+            city: string;
+            district: string | null;
+            address: string;
+            squareMeters: number;
+            openingDate: Date | null;
+            mallId: string | null;
+            closingDate: Date | null;
+        };
+    } & {
+        tenantId: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        storeId: string;
+        commonAreaCharges: number | null;
+        month: number;
+        year: number;
+        revenue: number;
+        rent: number;
+        otherExpenses: number | null;
+        rentToRevenueRatio: number;
+        revenuePerSquareMeter: number;
+        profitMargin: number | null;
+        footTraffic: number | null;
+        conversionRate: number | null;
+        performanceScore: number | null;
+        recommendation: import(".prisma/client").$Enums.PerformanceRecommendation | null;
+    })[]>;
+}
+//# sourceMappingURL=analytics.controller.d.ts.map

@@ -1,0 +1,1413 @@
+// RentOrgin Database Schema
+// Multi-tenant architecture with row-level security
+// Version: 0.1.0
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// TENANT & USER MANAGEMENT - Multi-Tenant Foundation
+// ============================================================
+
+model Tenant {
+  id     String       @id @default(cuid())
+  name   String
+  domain String       @unique // e.g., "acme-corp"
+  plan   TenantPlan   @default(FREE)
+  status TenantStatus @default(ACTIVE)
+
+  // Settings
+  currency String @default("TRY")
+  language String @default("tr")
+  timezone String @default("Europe/Istanbul")
+
+  // Subscription
+  subscriptionStartDate DateTime  @default(now())
+  subscriptionEndDate   DateTime?
+  maxUsers              Int       @default(5)
+  maxStores             Int       @default(10)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  users          User[]
+  stores         Store[]
+  leases         Lease[]
+  malls          Mall[]
+  expenses       Expense[]
+  budgets        Budget[]
+  risks          Risk[]
+  aiInteractions AIInteraction[]
+  sessions       UserSession[]
+
+  // Leasing Manager Module Relations
+  leasingTasks            LeasingTask[]
+  franchiseProjects       FranchiseProject[]
+  leasingRequests         LeasingRequest[]
+  jobDescriptionTemplates JobDescriptionTemplate[]
+  jobDescriptionLogs      JobDescriptionGenerationLog[]
+  marketResearchRecords   MarketResearchRecord[]
+
+  @@map("tenants")
+}
+
+enum TenantPlan {
+  FREE
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+  TRIAL
+  CANCELLED
+}
+
+model User {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  email     String     @unique
+  password  String
+  firstName String
+  lastName  String
+  role      UserRole   @default(USER)
+  status    UserStatus @default(ACTIVE)
+
+  // Settings
+  language String  @default("tr")
+  timezone String  @default("Europe/Istanbul")
+  avatar   String?
+
+  // Audit
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  assignedLeases      Lease[]              @relation("AssignedTo")
+  negotiations        Negotiation[]
+  aiInteractions      AIInteraction[]
+  sessions            UserSession[]
+  spaceChangeRequests SpaceChangeRequest[]
+
+  @@index([tenantId])
+  @@map("users")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  USER
+  VIEWER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+// ============================================================
+// CORE ENTITIES - Stores, Malls, Leases
+// ============================================================
+
+model Store {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Basic Info
+  name    String
+  code    String  @unique // Internal store code
+  brand   String?
+  concept String?
+
+  // Location
+  country  String
+  city     String
+  district String?
+  address  String
+
+  // Size & Status
+  squareMeters Float
+  status       StoreStatus @default(PLANNING)
+
+  // Dates
+  openingDate DateTime?
+  closingDate DateTime?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  mallId              String?
+  mall                Mall?                @relation(fields: [mallId], references: [id])
+  leases              Lease[]
+  expenses            Expense[]
+  analytics           StoreAnalytics[]
+  spaceChangeRequests SpaceChangeRequest[]
+
+  @@index([tenantId])
+  @@index([mallId])
+  @@map("stores")
+}
+
+enum StoreStatus {
+  PLANNING
+  ACTIVE
+  RENOVATION
+  CLOSING
+  CLOSED
+}
+
+model Mall {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Basic Info
+  name String
+  type MallType
+
+  // Location
+  country  String
+  city     String
+  district String?
+  address  String
+
+  // Management
+  managementCompany   String?
+  relationshipQuality RelationshipQuality @default(NEUTRAL)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  stores       Store[]
+  leases       Lease[]
+  contacts     MallContact[]
+  negotiations Negotiation[]
+
+  @@index([tenantId])
+  @@map("malls")
+}
+
+enum MallType {
+  SHOPPING_MALL
+  OUTLET
+  STREET_RETAIL
+  AIRPORT
+  STATION
+  MIXED_USE
+}
+
+enum RelationshipQuality {
+  EXCELLENT
+  GOOD
+  NEUTRAL
+  FAIR
+  POOR
+}
+
+model MallContact {
+  id     String @id @default(cuid())
+  mallId String
+  mall   Mall   @relation(fields: [mallId], references: [id], onDelete: Cascade)
+
+  name      String
+  title     String?
+  email     String?
+  phone     String?
+  isPrimary Boolean @default(false)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([mallId])
+  @@map("mall_contacts")
+}
+
+// ============================================================
+// LEASE MANAGEMENT MODULE
+// ============================================================
+
+model Lease {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Relations
+  storeId String
+  store   Store   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  mallId  String?
+  mall    Mall?   @relation(fields: [mallId], references: [id])
+
+  // Assignment
+  assignedToId String?
+  assignedTo   User?   @relation("AssignedTo", fields: [assignedToId], references: [id])
+
+  // Contract Basics
+  contractNumber String      @unique
+  version        Int         @default(1)
+  status         LeaseStatus @default(DRAFT)
+
+  // Dates
+  startDate  DateTime
+  endDate    DateTime
+  signedDate DateTime?
+
+  // Financial Terms
+  monthlyRent Float
+  currency    String @default("TRY")
+
+  // Escalation
+  escalationType  EscalationType @default(FIXED_PERCENTAGE)
+  escalationRate  Float          @default(0)
+  escalationIndex String? // e.g., "TUFE", "CPI"
+
+  // Renewal
+  renewalOptionMonths Int?
+  renewalNoticeMonths Int  @default(3)
+
+  // Additional Terms
+  commonAreaCharges Float? // CAC
+  securityDeposit   Float?
+  fitOutPeriodDays  Int?
+
+  // Documents
+  documentUrl     String?
+  documentVersion Int     @default(1)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  negotiations  Negotiation[]
+  renewals      LeaseRenewal[]
+  optimizations ContractOptimization[]
+
+  @@index([tenantId])
+  @@index([storeId])
+  @@index([mallId])
+  @@index([status])
+  @@index([endDate])
+  @@index([contractNumber])
+  @@map("leases")
+}
+
+enum LeaseStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  ACTIVE
+  EXPIRING_SOON
+  EXPIRED
+  RENEWED
+  TERMINATED
+  CANCELLED
+}
+
+enum EscalationType {
+  NONE
+  FIXED_PERCENTAGE
+  INDEX_BASED
+  REVENUE_BASED
+  CUSTOM
+}
+
+model LeaseRenewal {
+  id      String @id @default(cuid())
+  leaseId String
+  lease   Lease  @relation(fields: [leaseId], references: [id], onDelete: Cascade)
+
+  status RenewalStatus @default(PENDING)
+
+  // Proposed Terms
+  proposedMonthlyRent Float?
+  proposedDuration    Int? // months
+  proposedStartDate   DateTime?
+
+  // Negotiation
+  landlordResponse String?
+  notes            String?
+
+  // Dates
+  reminderSentAt       DateTime?
+  negotiationStartDate DateTime?
+  completionDate       DateTime?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([leaseId])
+  @@map("lease_renewals")
+}
+
+enum RenewalStatus {
+  PENDING
+  IN_NEGOTIATION
+  ACCEPTED
+  REJECTED
+  COMPLETED
+  CANCELLED
+}
+
+// ============================================================
+// MALL RELATIONS MODULE
+// ============================================================
+
+model Negotiation {
+  id       String @id @default(cuid())
+  tenantId String
+
+  // Relations
+  mallId  String
+  mall    Mall    @relation(fields: [mallId], references: [id], onDelete: Cascade)
+  leaseId String?
+  lease   Lease?  @relation(fields: [leaseId], references: [id])
+  userId  String
+  user    User    @relation(fields: [userId], references: [id])
+
+  // Negotiation Details
+  type        NegotiationType
+  status      NegotiationStatus @default(INITIATED)
+  subject     String
+  description String?
+
+  // Outcome
+  outcome     String?
+  agreedTerms String?
+
+  // Dates
+  startDate    DateTime  @default(now())
+  endDate      DateTime?
+  nextFollowUp DateTime?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  interactions NegotiationInteraction[]
+
+  @@index([mallId])
+  @@index([leaseId])
+  @@map("negotiations")
+}
+
+enum NegotiationType {
+  RENT_REDUCTION
+  LEASE_EXTENSION
+  EARLY_TERMINATION
+  SPACE_EXPANSION
+  SPACE_REDUCTION
+  CAC_DISPUTE
+  RENOVATION_APPROVAL
+  OTHER
+}
+
+enum NegotiationStatus {
+  INITIATED
+  IN_PROGRESS
+  PENDING_RESPONSE
+  ON_HOLD
+  AGREED
+  REJECTED
+  CANCELLED
+}
+
+model NegotiationInteraction {
+  id            String      @id @default(cuid())
+  negotiationId String
+  negotiation   Negotiation @relation(fields: [negotiationId], references: [id], onDelete: Cascade)
+
+  type        InteractionType
+  date        DateTime        @default(now())
+  notes       String?
+  documentUrl String?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([negotiationId])
+  @@map("negotiation_interactions")
+}
+
+enum InteractionType {
+  MEETING
+  EMAIL
+  PHONE_CALL
+  DOCUMENT_SENT
+  DOCUMENT_RECEIVED
+  SITE_VISIT
+  OTHER
+}
+
+// ============================================================
+// LOCATION ANALYTICS MODULE
+// ============================================================
+
+model StoreAnalytics {
+  id       String @id @default(cuid())
+  tenantId String
+
+  storeId String
+  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  // Period
+  year  Int
+  month Int
+
+  // Financial Metrics
+  revenue           Float
+  rent              Float
+  commonAreaCharges Float?
+  otherExpenses     Float?
+
+  // Calculated KPIs
+  rentToRevenueRatio    Float
+  revenuePerSquareMeter Float
+  profitMargin          Float?
+
+  // Foot Traffic
+  footTraffic    Int?
+  conversionRate Float?
+
+  // Performance Score (0-100)
+  performanceScore Float?
+  recommendation   PerformanceRecommendation?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([storeId, year, month])
+  @@index([tenantId])
+  @@index([storeId])
+  @@index([year, month])
+  @@map("store_analytics")
+}
+
+enum PerformanceRecommendation {
+  CONTINUE
+  MONITOR
+  RENEGOTIATE
+  DOWNSIZE
+  RELOCATE
+  CLOSE
+}
+
+// ============================================================
+// FEASIBILITY ANALYSIS MODULE
+// ============================================================
+
+model FeasibilityAnalysis {
+  id       String @id @default(cuid())
+  tenantId String
+
+  storeId  String?
+  location String // For new stores
+
+  type   FeasibilityType
+  status AnalysisStatus  @default(DRAFT)
+
+  // Financial Projections
+  estimatedMonthlyRent    Float
+  estimatedMonthlyRevenue Float
+  estimatedSetupCost      Float?
+  breakEvenMonths         Int?
+
+  // Analysis Results
+  recommendation  String?
+  riskLevel       RiskLevel?
+  confidenceScore Float? // 0-100
+
+  // Documents
+  reportUrl String?
+
+  // Audit
+  createdBy   String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+
+  @@index([tenantId])
+  @@map("feasibility_analyses")
+}
+
+enum FeasibilityType {
+  NEW_STORE
+  RELOCATION
+  EXPANSION
+  DOWNSIZING
+  CLOSURE
+}
+
+enum AnalysisStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  APPROVED
+  REJECTED
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// ============================================================
+// EXPENSE TRACKING MODULE
+// ============================================================
+
+model Expense {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  storeId String
+  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  type        ExpenseType
+  category    String?
+  description String?
+
+  // Financial
+  amount   Float
+  currency String @default("TRY")
+
+  // Dates
+  dueDate  DateTime
+  paidDate DateTime?
+
+  // Status
+  status ExpenseStatus @default(PENDING)
+
+  // Dispute
+  isDisputed        Boolean   @default(false)
+  disputeReason     String?
+  disputeResolvedAt DateTime?
+
+  // Invoice
+  invoiceNumber String?
+  invoiceUrl    String?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([storeId])
+  @@index([status])
+  @@map("expenses")
+}
+
+enum ExpenseType {
+  RENT
+  COMMON_AREA_CHARGE
+  UTILITY
+  MAINTENANCE
+  INSURANCE
+  TAX
+  MARKETING_FEE
+  OTHER
+}
+
+enum ExpenseStatus {
+  PENDING
+  PAID
+  OVERDUE
+  DISPUTED
+  CANCELLED
+}
+
+// ============================================================
+// CONTRACT OPTIMIZATION MODULE
+// ============================================================
+
+model ContractOptimization {
+  id       String @id @default(cuid())
+  tenantId String
+
+  leaseId String
+  lease   Lease  @relation(fields: [leaseId], references: [id], onDelete: Cascade)
+
+  status OptimizationStatus @default(DRAFT)
+
+  // Analysis
+  analysisDate     DateTime @default(now())
+  weaknesses       String[] // JSON array of identified issues
+  suggestions      String[] // JSON array of suggested improvements
+  potentialSavings Float?
+
+  // AI Generated
+  negotiationStrategy String?
+  counterArguments    String?
+
+  // Outcome
+  implemented   Boolean @default(false)
+  actualSavings Float?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([leaseId])
+  @@map("contract_optimizations")
+}
+
+enum OptimizationStatus {
+  DRAFT
+  ANALYZED
+  APPROVED
+  IN_NEGOTIATION
+  IMPLEMENTED
+  REJECTED
+}
+
+// ============================================================
+// SPACE MANAGEMENT MODULE
+// ============================================================
+
+model SpaceChangeRequest {
+  id       String @id @default(cuid())
+  tenantId String
+
+  storeId String
+  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  requestedById String
+  requestedBy   User   @relation(fields: [requestedById], references: [id])
+
+  type   SpaceChangeType
+  status SpaceChangeStatus @default(DRAFT)
+
+  // Current State
+  currentSquareMeters Float
+
+  // Proposed Change
+  proposedSquareMeters Float?
+  estimatedCost        Float?
+  justification        String?
+
+  // Approval
+  approvalStatus ApprovalStatus @default(PENDING)
+  approvedById   String?
+  approvedAt     DateTime?
+
+  // Implementation
+  plannedStartDate     DateTime?
+  plannedEndDate       DateTime?
+  actualCompletionDate DateTime?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([storeId])
+  @@map("space_change_requests")
+}
+
+enum SpaceChangeType {
+  EXPANSION
+  DOWNSIZING
+  RELOCATION
+  RENOVATION
+  CLOSURE
+}
+
+enum SpaceChangeStatus {
+  DRAFT
+  SUBMITTED
+  IN_REVIEW
+  APPROVED
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+  CANCELLED
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// ============================================================
+// BUDGET & RISK MANAGEMENT MODULE
+// ============================================================
+
+model Budget {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Period
+  year    Int
+  quarter Int? // 1-4, null for annual
+
+  // Scope
+  scope      BudgetScope
+  scopeValue String? // city name, brand name, etc.
+
+  // Budget
+  plannedAmount Float
+  actualAmount  Float?
+  variance      Float?
+
+  // Status
+  status BudgetStatus @default(DRAFT)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tenantId, year, quarter, scope, scopeValue])
+  @@index([tenantId])
+  @@map("budgets")
+}
+
+enum BudgetScope {
+  COMPANY
+  COUNTRY
+  CITY
+  BRAND
+  MALL_TYPE
+}
+
+enum BudgetStatus {
+  DRAFT
+  APPROVED
+  ACTIVE
+  CLOSED
+}
+
+model Risk {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Risk Details
+  category RiskCategory
+  severity RiskLevel
+  status   RiskStatus   @default(IDENTIFIED)
+
+  title       String
+  description String?
+
+  // Impact
+  potentialImpact Float? // Financial impact estimate
+  probability     Float? // 0-100
+
+  // Mitigation
+  mitigationPlan String?
+  mitigationCost Float?
+
+  // Dates
+  identifiedAt DateTime  @default(now())
+  mitigatedAt  DateTime?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([category])
+  @@map("risks")
+}
+
+enum RiskCategory {
+  FINANCIAL
+  OPERATIONAL
+  LEGAL
+  RELATIONSHIP
+  MARKET
+  OTHER
+}
+
+enum RiskStatus {
+  IDENTIFIED
+  ASSESSING
+  MITIGATING
+  MONITORING
+  RESOLVED
+  ACCEPTED
+}
+
+// ============================================================
+// AI ASSISTANT MODULE
+// ============================================================
+
+model AIInteraction {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Interaction Details
+  promptId      String // References prompt template ID
+  promptVersion String @default("1.0")
+
+  // Context
+  module      String // e.g., "lease-management", "analytics"
+  contextData String? // JSON of relevant data
+
+  // AI Request & Response
+  userInput  String
+  aiResponse String
+
+  // User Feedback
+  wasAccepted  Boolean?
+  wasEdited    Boolean  @default(false)
+  userEdits    String?
+  satisfaction Int? // 1-5 rating
+
+  // Metadata
+  model        String @default("gpt-4")
+  tokensUsed   Int?
+  responseTime Int? // milliseconds
+
+  // Audit
+  createdAt DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([module])
+  @@map("ai_interactions")
+}
+
+// ============================================================
+// TRANSLATION ENGINE MODULE
+// ============================================================
+
+model TranslationJob {
+  id       String @id @default(cuid())
+  tenantId String
+
+  // Source Document
+  sourceDocumentUrl String
+  sourceLanguage    String
+  targetLanguage    String
+
+  // Segmentation
+  totalSegments     Int
+  completedSegments Int @default(0)
+
+  // Status
+  status   TranslationStatus @default(PENDING)
+  progress Float             @default(0) // 0-100
+
+  // Output
+  translatedDocumentUrl String?
+
+  // Quality Metrics
+  averageQualityScore Float?
+
+  // Audit
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+
+  // Relations
+  segments TranslationSegment[]
+
+  @@index([tenantId])
+  @@map("translation_jobs")
+}
+
+enum TranslationStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model TranslationSegment {
+  id    String         @id @default(cuid())
+  jobId String
+  job   TranslationJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  segmentNumber Int
+
+  // Content
+  sourceText     String
+  translatedText String?
+
+  // Quality Checks
+  lengthDifference Float? // Percentage difference
+  qualityScore     Float? // 0-100
+
+  // Status
+  status SegmentStatus @default(PENDING)
+
+  // Metadata
+  wordCount Int
+  charCount Int
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([jobId, segmentNumber])
+  @@index([jobId])
+  @@map("translation_segments")
+}
+
+enum SegmentStatus {
+  PENDING
+  TRANSLATING
+  COMPLETED
+  FAILED
+  REQUIRES_REVIEW
+}
+
+// ============================================================
+// SESSION MANAGEMENT MODULE
+// ============================================================
+
+model UserSession {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Session Data
+  name        String
+  description String?
+  sessionData String // JSON export of user context
+
+  // Metadata
+  appVersion String @default("0.1.0")
+
+  // Audit
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastLoadedAt DateTime?
+
+  @@index([tenantId])
+  @@index([userId])
+  @@map("user_sessions")
+}
+
+// ============================================================
+// SYSTEM CONFIGURATION
+// ============================================================
+
+model SystemConfig {
+  id    String     @id @default(cuid())
+  key   String     @unique
+  value String
+  type  ConfigType @default(STRING)
+
+  description String?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("system_config")
+}
+
+enum ConfigType {
+  STRING
+  NUMBER
+  BOOLEAN
+  JSON
+}
+
+// ============================================================
+// LEASING MANAGER MODULE - Job Definition & Task Management
+// Kiralama Yöneticisi Modülü - İş Tanımı & Görev Yönetimi
+// ============================================================
+
+model LeasingManagerRoleTemplate {
+  id String @id @default(cuid())
+
+  // Role Definition
+  nameTR        String
+  nameEN        String
+  descriptionTR String?
+  descriptionEN String?
+
+  // Core Responsibilities
+  coreResponsibilities String[] // JSON array
+
+  // Core Skills
+  coreSkills String[] // JSON array
+
+  // Applicable Sectors
+  sectors        String[] // JSON array
+  seniorityLevel SeniorityLevel @default(MID)
+
+  // Metadata
+  isDefault Boolean @default(false)
+  isActive  Boolean @default(true)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("leasing_manager_role_templates")
+}
+
+enum SeniorityLevel {
+  ENTRY
+  MID
+  SENIOR
+  LEAD
+  DIRECTOR
+}
+
+model LeasingTask {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Task Details
+  category    LeasingTaskCategory
+  title       String
+  description String?
+  priority    TaskPriority        @default(MEDIUM)
+
+  // Relations
+  storeId            String?
+  mallId             String?
+  franchiseProjectId String?
+  leaseId            String?
+
+  // Assignment
+  assignedToId String?
+
+  // SLA & Risk
+  defaultSLA Int? // Days
+  riskLevel  RiskLevel @default(LOW)
+
+  // Status
+  status TaskStatus @default(PENDING)
+
+  // Dates
+  dueDate     DateTime?
+  completedAt DateTime?
+
+  // Audit
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  FranchiseProject FranchiseProject? @relation(fields: [franchiseProjectId], references: [id])
+
+  @@index([tenantId])
+  @@index([storeId])
+  @@index([mallId])
+  @@index([status])
+  @@map("leasing_tasks")
+}
+
+enum LeasingTaskCategory {
+  CONTRACT_NEGOTIATION
+  CONTRACT_RENEWAL
+  MAINTENANCE
+  BUDGET_TRACKING
+  FRANCHISE_DEVELOPMENT
+  MARKET_RESEARCH
+  COMPLIANCE
+  TENANT_RELATIONS
+  SPACE_MANAGEMENT
+  REPORTING
+  OTHER
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+model FranchiseProject {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Project Details
+  name   String
+  code   String?                @unique
+  status FranchiseProjectStatus @default(PIPELINE)
+
+  // Location Target
+  targetRegion String?
+  targetCity   String?
+  targetMallId String?
+
+  // Store Type
+  storeType String?
+  brand     String?
+  concept   String?
+
+  // Financial Projections
+  estimatedCapex   Float? // Capital expenditure
+  estimatedOpex    Float? // Operational expenditure
+  expectedRevenue  Float?
+  expectedRentCost Float?
+
+  // Analysis
+  feasibilityScore Float? // 0-100
+  riskAssessment   String?
+  notes            String?
+
+  // Responsible
+  projectManagerId String?
+
+  // Dates
+  targetOpeningDate DateTime?
+  actualOpeningDate DateTime?
+
+  // Related Store (when approved/opened)
+  storeId String?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tasks LeasingTask[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([targetCity])
+  @@map("franchise_projects")
+}
+
+enum FranchiseProjectStatus {
+  PIPELINE
+  EVALUATION
+  FEASIBILITY_STUDY
+  APPROVED
+  IN_CONSTRUCTION
+  OPENED
+  REJECTED
+  CANCELLED
+}
+
+model LeasingRequest {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Request Type & Source
+  type   LeasingRequestType
+  source RequestSource      @default(INTERNAL)
+
+  // Details
+  title       String
+  description String?
+
+  // Relations
+  storeId            String?
+  mallId             String?
+  leaseId            String?
+  franchiseProjectId String?
+
+  // Assignment & Status
+  createdById  String
+  assignedToId String?
+  status       RequestStatus @default(OPEN)
+  priority     TaskPriority  @default(MEDIUM)
+
+  // SLA
+  dueDate DateTime?
+
+  // Resolution
+  resolution   String?
+  resolvedAt   DateTime?
+  resolvedById String?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([storeId])
+  @@index([mallId])
+  @@index([status])
+  @@index([type])
+  @@map("leasing_requests")
+}
+
+enum LeasingRequestType {
+  RENT_REDUCTION
+  LEASE_EXTENSION
+  CONTRACT_REVISION
+  ADDITIONAL_SPACE
+  SPACE_REDUCTION
+  COMPLAINT
+  FRANCHISE_INQUIRY
+  RENEWAL_REQUEST
+  EARLY_TERMINATION
+  MAINTENANCE_REQUEST
+  DOCUMENT_REQUEST
+  OTHER
+}
+
+enum RequestSource {
+  TENANT
+  LANDLORD
+  INTERNAL
+  FRANCHISE_CANDIDATE
+  LEGAL_DEPT
+  FINANCE_DEPT
+}
+
+enum RequestStatus {
+  OPEN
+  IN_PROGRESS
+  PENDING_APPROVAL
+  PENDING_INFO
+  RESOLVED
+  REJECTED
+  CANCELLED
+}
+
+model JobDescriptionTemplate {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Role Definition
+  roleNameTR String
+  roleNameEN String
+  summaryTR  String?
+  summaryEN  String?
+
+  // Responsibilities
+  responsibilitiesTR String[] // JSON array
+  responsibilitiesEN String[] // JSON array
+
+  // Skills & Requirements
+  skillsTR String[] // JSON array
+  skillsEN String[] // JSON array
+
+  // Additional Info
+  sectors        String[] // JSON array
+  seniorityLevel SeniorityLevel @default(MID)
+
+  // Context (company specific)
+  companyContext String? // JSON with company size, region, etc.
+
+  // Metadata
+  isTemplate  Boolean @default(false)
+  isPublished Boolean @default(false)
+
+  // Audit
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  generationLogs JobDescriptionGenerationLog[]
+
+  @@index([tenantId])
+  @@index([createdById])
+  @@map("job_description_templates")
+}
+
+model JobDescriptionGenerationLog {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Input Parameters
+  inputParams String // JSON
+
+  // Generated Output
+  templateId String?
+  template   JobDescriptionTemplate? @relation(fields: [templateId], references: [id])
+
+  // AI Metadata
+  model        String @default("gpt-4")
+  tokensUsed   Int?
+  responseTime Int? // milliseconds
+
+  // User Info
+  userId String
+
+  // Audit
+  createdAt DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([templateId])
+  @@map("job_description_generation_logs")
+}
+
+model MarketResearchRecord {
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Location
+  region   String?
+  city     String?
+  district String?
+  mallId   String?
+
+  // Competitor Data
+  competitorName String?
+  competitorType String? // Direct, Indirect, etc.
+
+  // Rent & Market Data
+  rentLevel   Float? // Average rent in area
+  marketShare Float? // Percentage
+  footTraffic Int?
+
+  // Analysis
+  notes      String?
+  dataSource String? // Survey, Public Data, etc.
+
+  // Date
+  recordDate DateTime @default(now())
+
+  // Audit
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([city])
+  @@index([mallId])
+  @@index([recordDate])
+  @@map("market_research_records")
+}

@@ -1,0 +1,91 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - heading "RentOrgin" [level=1] [ref=e8]
+          - paragraph [ref=e9]: Kurumsal Kiralama Yönetim Platformu v0.1.0
+        - generic [ref=e10]:
+          - link "Giriş Yap" [ref=e11] [cursor=pointer]:
+            - /url: /login
+          - link "Kayıt Ol" [ref=e12] [cursor=pointer]:
+            - /url: /register
+    - main [ref=e13]:
+      - generic [ref=e14]:
+        - heading "Hoş Geldiniz" [level=2] [ref=e15]
+        - paragraph [ref=e16]: Tüm mağaza kiralama süreçlerinizi tek bir platformdan yönetin. 8 modül, yapay zeka desteği, gelişmiş analitik.
+      - generic [ref=e17]:
+        - link "Mağazalar Stores Mağaza lokasyonları ve bilgileri" [ref=e18] [cursor=pointer]:
+          - /url: /stores
+          - generic [ref=e19]:
+            - img [ref=e21]
+            - heading "Mağazalar" [level=3] [ref=e29]
+            - paragraph [ref=e30]: Stores
+            - paragraph [ref=e31]: Mağaza lokasyonları ve bilgileri
+        - link "Kira Sözleşmeleri Leases Kira sözleşmesi yönetimi" [ref=e32] [cursor=pointer]:
+          - /url: /leases
+          - generic [ref=e33]:
+            - img [ref=e35]
+            - heading "Kira Sözleşmeleri" [level=3] [ref=e41]
+            - paragraph [ref=e42]: Leases
+            - paragraph [ref=e43]: Kira sözleşmesi yönetimi
+        - link "Analitik Analytics Performans ve lokasyon analizi" [ref=e44] [cursor=pointer]:
+          - /url: /analytics
+          - generic [ref=e45]:
+            - img [ref=e47]
+            - heading "Analitik" [level=3] [ref=e52]
+            - paragraph [ref=e53]: Analytics
+            - paragraph [ref=e54]: Performans ve lokasyon analizi
+        - link "AI Asistan AI Assistant Yapay zeka destekli karar desteği" [ref=e55] [cursor=pointer]:
+          - /url: /ai-assistant
+          - generic [ref=e56]:
+            - img [ref=e58]
+            - heading "AI Asistan" [level=3] [ref=e65]
+            - paragraph [ref=e66]: AI Assistant
+            - paragraph [ref=e67]: Yapay zeka destekli karar desteği
+        - link "Çeviri Translation Sözleşme çeviri motoru" [ref=e68] [cursor=pointer]:
+          - /url: /translation
+          - generic [ref=e69]:
+            - img [ref=e71]
+            - heading "Çeviri" [level=3] [ref=e75]
+            - paragraph [ref=e76]: Translation
+            - paragraph [ref=e77]: Sözleşme çeviri motoru
+        - link "Ayarlar Settings Uygulama ayarları ve oturum yönetimi" [ref=e78] [cursor=pointer]:
+          - /url: /settings
+          - generic [ref=e79]:
+            - img [ref=e81]
+            - heading "Ayarlar" [level=3] [ref=e84]
+            - paragraph [ref=e85]: Settings
+            - paragraph [ref=e86]: Uygulama ayarları ve oturum yönetimi
+      - generic [ref=e87]:
+        - heading "Platform Özellikleri" [level=3] [ref=e88]
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - heading "✅ Modüler Mimari" [level=4] [ref=e91]
+            - paragraph [ref=e92]: Her modül bağımsız çalışır, kolayca genişletilebilir
+          - generic [ref=e93]:
+            - heading "🤖 AI Destekli" [level=4] [ref=e94]
+            - paragraph [ref=e95]: Her ekranda bağlam-farkındalıklı yapay zeka asistanı
+          - generic [ref=e96]:
+            - heading "🌐 Multi-Tenant" [level=4] [ref=e97]
+            - paragraph [ref=e98]: SaaS'a hazır, çoklu müşteri desteği
+          - generic [ref=e99]:
+            - heading "📊 Gelişmiş Analitik" [level=4] [ref=e100]
+            - paragraph [ref=e101]: Detaylı performans metrikleri ve raporlama
+    - contentinfo [ref=e102]:
+      - generic [ref=e103]:
+        - paragraph [ref=e104]: RentOrgin v0.1.0 | © 2025 | Kurumsal Kiralama Yönetim Platformu
+        - paragraph [ref=e105]:
+          - link "API Documentation" [ref=e106] [cursor=pointer]:
+            - /url: /api/docs
+          - text: "|"
+          - link "Principles" [ref=e107] [cursor=pointer]:
+            - /url: /docs/principles
+          - text: "|"
+          - link "Glossary" [ref=e108] [cursor=pointer]:
+            - /url: /docs/glossary
+```

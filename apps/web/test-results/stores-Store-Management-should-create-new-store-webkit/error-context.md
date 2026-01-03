@@ -1,0 +1,91 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - heading "RentOrgin" [level=1] [ref=e8]
+          - paragraph [ref=e9]: Kurumsal Kiralama Yönetim Platformu v0.1.0
+        - generic [ref=e10]:
+          - link "Giriş Yap" [ref=e11]:
+            - /url: /login
+          - link "Kayıt Ol" [ref=e12]:
+            - /url: /register
+    - main [ref=e13]:
+      - generic [ref=e14]:
+        - heading "Hoş Geldiniz" [level=2] [ref=e15]
+        - paragraph [ref=e16]: Tüm mağaza kiralama süreçlerinizi tek bir platformdan yönetin. 8 modül, yapay zeka desteği, gelişmiş analitik.
+      - generic [ref=e17]:
+        - link "Mağazalar Stores Mağaza lokasyonları ve bilgileri" [ref=e18]:
+          - /url: /stores
+          - generic [ref=e19]:
+            - img [ref=e21]
+            - heading "Mağazalar" [level=3] [ref=e25]
+            - paragraph [ref=e26]: Stores
+            - paragraph [ref=e27]: Mağaza lokasyonları ve bilgileri
+        - link "Kira Sözleşmeleri Leases Kira sözleşmesi yönetimi" [ref=e28]:
+          - /url: /leases
+          - generic [ref=e29]:
+            - img [ref=e31]
+            - heading "Kira Sözleşmeleri" [level=3] [ref=e34]
+            - paragraph [ref=e35]: Leases
+            - paragraph [ref=e36]: Kira sözleşmesi yönetimi
+        - link "Analitik Analytics Performans ve lokasyon analizi" [ref=e37]:
+          - /url: /analytics
+          - generic [ref=e38]:
+            - img [ref=e40]
+            - heading "Analitik" [level=3] [ref=e42]
+            - paragraph [ref=e43]: Analytics
+            - paragraph [ref=e44]: Performans ve lokasyon analizi
+        - link "AI Asistan AI Assistant Yapay zeka destekli karar desteği" [ref=e45]:
+          - /url: /ai-assistant
+          - generic [ref=e46]:
+            - img [ref=e48]
+            - heading "AI Asistan" [level=3] [ref=e51]
+            - paragraph [ref=e52]: AI Assistant
+            - paragraph [ref=e53]: Yapay zeka destekli karar desteği
+        - link "Çeviri Translation Sözleşme çeviri motoru" [ref=e54]:
+          - /url: /translation
+          - generic [ref=e55]:
+            - img [ref=e57]
+            - heading "Çeviri" [level=3] [ref=e61]
+            - paragraph [ref=e62]: Translation
+            - paragraph [ref=e63]: Sözleşme çeviri motoru
+        - link "Ayarlar Settings Uygulama ayarları ve oturum yönetimi" [ref=e64]:
+          - /url: /settings
+          - generic [ref=e65]:
+            - img [ref=e67]
+            - heading "Ayarlar" [level=3] [ref=e70]
+            - paragraph [ref=e71]: Settings
+            - paragraph [ref=e72]: Uygulama ayarları ve oturum yönetimi
+      - generic [ref=e73]:
+        - heading "Platform Özellikleri" [level=3] [ref=e74]
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - heading "✅ Modüler Mimari" [level=4] [ref=e77]
+            - paragraph [ref=e78]: Her modül bağımsız çalışır, kolayca genişletilebilir
+          - generic [ref=e79]:
+            - heading "🤖 AI Destekli" [level=4] [ref=e80]
+            - paragraph [ref=e81]: Her ekranda bağlam-farkındalıklı yapay zeka asistanı
+          - generic [ref=e82]:
+            - heading "🌐 Multi-Tenant" [level=4] [ref=e83]
+            - paragraph [ref=e84]: SaaS'a hazır, çoklu müşteri desteği
+          - generic [ref=e85]:
+            - heading "📊 Gelişmiş Analitik" [level=4] [ref=e86]
+            - paragraph [ref=e87]: Detaylı performans metrikleri ve raporlama
+    - contentinfo [ref=e88]:
+      - generic [ref=e89]:
+        - paragraph [ref=e90]: RentOrgin v0.1.0 | © 2025 | Kurumsal Kiralama Yönetim Platformu
+        - paragraph [ref=e91]:
+          - link "API Documentation" [ref=e92]:
+            - /url: /api/docs
+          - text: "|"
+          - link "Principles" [ref=e93]:
+            - /url: /docs/principles
+          - text: "|"
+          - link "Glossary" [ref=e94]:
+            - /url: /docs/glossary
+```

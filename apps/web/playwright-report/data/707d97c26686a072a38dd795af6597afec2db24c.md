@@ -1,0 +1,43 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e6]
+      - heading "RentOrgin" [level=1] [ref=e10]
+      - paragraph [ref=e11]: Kurumsal Kiralama Yönetim Platformu
+    - generic [ref=e12]:
+      - heading "Giriş Yap" [level=2] [ref=e13]
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]: E-posta
+          - generic [ref=e17]:
+            - img [ref=e18]
+            - textbox "E-posta" [ref=e21]:
+              - /placeholder: ornek@sirket.com
+        - generic [ref=e22]:
+          - generic [ref=e23]: Şifre
+          - generic [ref=e24]:
+            - img [ref=e25]
+            - textbox "Şifre" [ref=e28]:
+              - /placeholder: ••••••••
+        - button "Giriş Yap" [ref=e29] [cursor=pointer]:
+          - img [ref=e30]
+          - generic [ref=e34]: Giriş Yap
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: "Demo Hesabı:"
+        - paragraph [ref=e37]:
+          - text: "E-posta:"
+          - code [ref=e38]: admin@demo.com
+        - paragraph [ref=e39]:
+          - text: "Şifre:"
+          - code [ref=e40]: hashed_password_123
+      - paragraph [ref=e42]:
+        - text: Hesabınız yok mu?
+        - link "Kayıt Olun" [ref=e43] [cursor=pointer]:
+          - /url: /register
+    - link "← Ana Sayfaya Dön" [ref=e45] [cursor=pointer]:
+      - /url: /
+  - alert [ref=e46]
+```
