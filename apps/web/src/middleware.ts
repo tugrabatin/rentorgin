@@ -14,22 +14,29 @@ import type { NextRequest } from 'next/server';
 const publicRoutes = ['/', '/login', '/register'];
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  try {
+    const { pathname } = request.nextUrl;
 
-  // Check if route is public
-  // Rotanın public olup olmadığını kontrol et
-  const isPublicRoute = publicRoutes.some(route => pathname === route);
+    // Check if route is public
+    // Rotanın public olup olmadığını kontrol et
+    const isPublicRoute = publicRoutes.some(route => pathname === route || pathname.startsWith(route));
 
-  if (isPublicRoute) {
+    if (isPublicRoute) {
+      return NextResponse.next();
+    }
+
+    // For protected routes, check for token in cookies or redirect to login
+    // Korumalı rotalar için cookie'de token kontrolü yap veya login'e yönlendir
+    // Note: In production, you should verify the JWT here
+    // Not: Production'da JWT'yi burada doğrulamalısınız
+    
+    return NextResponse.next();
+  } catch (error) {
+    // If middleware fails, allow request to proceed
+    // Middleware başarısız olursa, isteğin devam etmesine izin ver
+    console.error('Middleware error:', error);
     return NextResponse.next();
   }
-
-  // For protected routes, check for token in cookies or redirect to login
-  // Korumalı rotalar için cookie'de token kontrolü yap veya login'e yönlendir
-  // Note: In production, you should verify the JWT here
-  // Not: Production'da JWT'yi burada doğrulamalısınız
-  
-  return NextResponse.next();
 }
 
 export const config = {
