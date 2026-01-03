@@ -10,7 +10,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
-import { AuthProvider } from '../contexts/auth-context';
+import { AuthProvider } from './auth-context';
 import { ThemeProvider } from '../contexts/theme-context';
 import { LanguageProvider } from '../contexts/language-context';
 
