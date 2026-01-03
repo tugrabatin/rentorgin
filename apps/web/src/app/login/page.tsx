@@ -11,10 +11,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import apiClient from '../../lib/api';
+import { useAuth } from '../auth-context';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -26,17 +27,11 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await apiClient.post('/auth/login', { email, password });
-      const { accessToken, refreshToken, user } = response.data;
-
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-      }
-
+      await login(email, password);
+      // Login başarılı, AuthContext zaten redirect yapacak
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Giriş başarısız');
+      setError(err.message || err.response?.data?.message || 'Giriş başarısız');
     } finally {
       setLoading(false);
     }

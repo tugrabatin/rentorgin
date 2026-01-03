@@ -61,11 +61,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadUser = async () => {
     try {
       const response = await apiClient.get('/auth/profile');
-      setUser(response.data.user);
+      // API direkt user objesi döndürüyor
+      setUser(response.data);
     } catch (error) {
       console.error('Failed to load user:', error);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      setUser(null);
     } finally {
       setIsLoading(false);
     }

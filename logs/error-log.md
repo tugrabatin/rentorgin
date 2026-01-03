@@ -5571,3 +5571,442 @@ To be defined
 ---
 
 
+### ERROR-001: Unauthorized
+**Date:** 2026-01-03T22:11:55.874Z  
+**Module:** auth  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+Unauthorized
+```
+
+**Stack Trace:**
+```
+UnauthorizedException: Unauthorized
+    at JwtAuthGuard.handleRequest (/Users/tugra/Desktop/rentorgin/apps/api/node_modules/@nestjs/passport/dist/auth.guard.js:60:30)
+    at /Users/tugra/Desktop/rentorgin/apps/api/node_modules/@nestjs/passport/dist/auth.guard.js:44:124
+    at /Users/tugra/Desktop/rentorgin/apps/api/node_modules/@nestjs/passport/dist/auth.guard.js:83:24
+    at allFailed (/Users/tugra/Desktop/rentorgin/node_modules/passport/lib/middleware/authenticate.js:110:18)
+    at attempt (/Users/tugra/Desktop/rentorgin/node_modules/passport/lib/middleware/authenticate.js:183:28)
+    at strategy.fail (/Users/tugra/Desktop/rentorgin/node_modules/passport/lib/middleware/authenticate.js:314:9)
+    at /Users/tugra/Desktop/rentorgin/node_modules/passport-jwt/lib/strategy.js:106:33
+    at module.exports [as verify] (/Users/tugra/Desktop/rentorgin/node_modules/jsonwebtoken/verify.js:70:12)
+    at module.exports [as JwtVerifier] (/Users/tugra/Desktop/rentorgin/node_modules/passport-jwt/lib/verify_jwt.js:4:16)
+    at /Users/tugra/Desktop/rentorgin/node_modules/passport-jwt/lib/strategy.js:104:25
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: GET /api/v1/auth/profile
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
+### ERROR-002: Invalid email or password
+**Date:** 2026-01-03T22:12:26.290Z  
+**Module:** auth  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+Invalid email or password
+```
+
+**Stack Trace:**
+```
+UnauthorizedException: Invalid email or password
+    at LocalStrategy.validate (/Users/tugra/Desktop/rentorgin/apps/api/src/modules/auth/strategies/local.strategy.ts:31:13)
+    at async LocalStrategy.callback [as _verify] (/Users/tugra/Desktop/rentorgin/apps/api/node_modules/@nestjs/passport/dist/passport/passport.strategy.js:11:44)
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: POST /api/v1/auth/login
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
+### ERROR-003: Cannot GET /api/v1/dashboard/stats
+**Date:** 2026-01-03T22:12:34.767Z  
+**Module:** dashboard  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+Cannot GET /api/v1/dashboard/stats
+```
+
+**Stack Trace:**
+```
+NotFoundException: Cannot GET /api/v1/dashboard/stats
+    at callback (/Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/routes-resolver.js:77:19)
+    at /Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/router-proxy.js:9:23
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+    at /Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:286:9
+    at Function.process_params (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:280:10)
+    at urlencodedParser (/Users/tugra/Desktop/rentorgin/node_modules/body-parser/lib/types/urlencoded.js:94:7)
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: GET /api/v1/dashboard/stats
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
+### ERROR-004: Cannot GET /api/v1/dashboard/stats
+**Date:** 2026-01-03T22:12:36.223Z  
+**Module:** dashboard  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+Cannot GET /api/v1/dashboard/stats
+```
+
+**Stack Trace:**
+```
+NotFoundException: Cannot GET /api/v1/dashboard/stats
+    at callback (/Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/routes-resolver.js:77:19)
+    at /Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/router-proxy.js:9:23
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+    at /Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:286:9
+    at Function.process_params (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:280:10)
+    at urlencodedParser (/Users/tugra/Desktop/rentorgin/node_modules/body-parser/lib/types/urlencoded.js:94:7)
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: GET /api/v1/dashboard/stats
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
+### ERROR-005: Invalid email or password
+**Date:** 2026-01-03T22:12:59.847Z  
+**Module:** auth  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+Invalid email or password
+```
+
+**Stack Trace:**
+```
+UnauthorizedException: Invalid email or password
+    at LocalStrategy.validate (/Users/tugra/Desktop/rentorgin/apps/api/src/modules/auth/strategies/local.strategy.ts:31:13)
+    at async LocalStrategy.callback [as _verify] (/Users/tugra/Desktop/rentorgin/apps/api/node_modules/@nestjs/passport/dist/passport/passport.strategy.js:11:44)
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: POST /api/v1/auth/login
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
+### ERROR-006: Cannot GET /api/v1/dashboard/stats
+**Date:** 2026-01-03T22:13:06.476Z  
+**Module:** dashboard  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+Cannot GET /api/v1/dashboard/stats
+```
+
+**Stack Trace:**
+```
+NotFoundException: Cannot GET /api/v1/dashboard/stats
+    at callback (/Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/routes-resolver.js:77:19)
+    at /Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/router-proxy.js:9:23
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+    at /Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:286:9
+    at Function.process_params (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:280:10)
+    at urlencodedParser (/Users/tugra/Desktop/rentorgin/node_modules/body-parser/lib/types/urlencoded.js:94:7)
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: GET /api/v1/dashboard/stats
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
+### ERROR-007: Cannot GET /api/v1/dashboard/stats
+**Date:** 2026-01-03T22:13:27.027Z  
+**Module:** dashboard  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+Cannot GET /api/v1/dashboard/stats
+```
+
+**Stack Trace:**
+```
+NotFoundException: Cannot GET /api/v1/dashboard/stats
+    at callback (/Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/routes-resolver.js:77:19)
+    at /Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/router-proxy.js:9:23
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+    at /Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:286:9
+    at Function.process_params (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:280:10)
+    at urlencodedParser (/Users/tugra/Desktop/rentorgin/node_modules/body-parser/lib/types/urlencoded.js:94:7)
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: GET /api/v1/dashboard/stats
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
+### ERROR-008: Cannot GET /api/v1/dashboard/stats
+**Date:** 2026-01-03T22:14:44.147Z  
+**Module:** dashboard  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+Cannot GET /api/v1/dashboard/stats
+```
+
+**Stack Trace:**
+```
+NotFoundException: Cannot GET /api/v1/dashboard/stats
+    at callback (/Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/routes-resolver.js:77:19)
+    at /Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/router-proxy.js:9:23
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+    at /Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:286:9
+    at Function.process_params (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:280:10)
+    at urlencodedParser (/Users/tugra/Desktop/rentorgin/node_modules/body-parser/lib/types/urlencoded.js:94:7)
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: GET /api/v1/dashboard/stats
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
+### ERROR-009: Cannot GET /api/v1/dashboard/stats
+**Date:** 2026-01-03T22:14:49.038Z  
+**Module:** dashboard  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+Cannot GET /api/v1/dashboard/stats
+```
+
+**Stack Trace:**
+```
+NotFoundException: Cannot GET /api/v1/dashboard/stats
+    at callback (/Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/routes-resolver.js:77:19)
+    at /Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/router-proxy.js:9:23
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+    at /Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:286:9
+    at Function.process_params (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:280:10)
+    at urlencodedParser (/Users/tugra/Desktop/rentorgin/node_modules/body-parser/lib/types/urlencoded.js:94:7)
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: GET /api/v1/dashboard/stats
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
+### ERROR-010: User with this email already exists
+**Date:** 2026-01-03T22:15:09.149Z  
+**Module:** auth  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+User with this email already exists
+```
+
+**Stack Trace:**
+```
+ConflictException: User with this email already exists
+    at AuthService.register (/Users/tugra/Desktop/rentorgin/apps/api/src/modules/auth/auth.service.ts:101:13)
+    at async /Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/router-execution-context.js:46:28
+    at async /Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/router-proxy.js:9:17
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: POST /api/v1/auth/register
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
+### ERROR-011: Cannot GET /api/v1/dashboard/stats
+**Date:** 2026-01-03T22:15:23.100Z  
+**Module:** dashboard  
+**Severity:** HIGH  
+**Status:** Open  
+
+**Error Message:**
+```
+Cannot GET /api/v1/dashboard/stats
+```
+
+**Stack Trace:**
+```
+NotFoundException: Cannot GET /api/v1/dashboard/stats
+    at callback (/Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/routes-resolver.js:77:19)
+    at /Users/tugra/Desktop/rentorgin/node_modules/@nestjs/core/router/router-proxy.js:9:23
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+    at /Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:286:9
+    at Function.process_params (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:280:10)
+    at urlencodedParser (/Users/tugra/Desktop/rentorgin/node_modules/body-parser/lib/types/urlencoded.js:94:7)
+    at Layer.handle [as handle_request] (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/tugra/Desktop/rentorgin/node_modules/express/lib/router/index.js:328:13)
+```
+
+**Context:**
+- User: Unknown
+- Tenant: Unknown
+- Action: GET /api/v1/dashboard/stats
+
+**Root Cause:**
+To be analyzed
+
+**Solution Attempted:**
+None yet
+
+**Prevention Measures:**
+To be defined
+
+---
+
