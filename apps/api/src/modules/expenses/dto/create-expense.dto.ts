@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsNumber, IsEnum, IsDateString, IsOptional, Min, MaxLength } from 'class-validator';
-import { ExpenseType, ExpenseStatus } from '@prisma/client';
+import { ExpenseType, ExpenseStatus } from '@rentorgin/core-domain';
 
 export class CreateExpenseDto {
   @ApiProperty({ description: 'Store ID' })

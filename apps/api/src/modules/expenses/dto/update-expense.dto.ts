@@ -1,6 +1,6 @@
 import { PartialType, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsDateString, IsOptional, IsString, IsEnum, MaxLength, IsBoolean } from 'class-validator';
-import { ExpenseStatus } from '@prisma/client';
+import { ExpenseStatus } from '@rentorgin/core-domain';
 import { CreateExpenseDto } from './create-expense.dto';
 
 export class UpdateExpenseDto extends PartialType(CreateExpenseDto) {
