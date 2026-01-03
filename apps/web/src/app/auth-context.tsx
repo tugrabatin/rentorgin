@@ -82,11 +82,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // Store tokens
       // Token'ları sakla
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+      }
 
+      // Set user state immediately
+      // Kullanıcı durumunu hemen ayarla
       setUser(userData);
-      router.push('/dashboard');
+      
+      // Don't redirect here - let the login page handle redirect
+      // Burada redirect yapma - login sayfası redirect'i halletsin
     } catch (error: any) {
       // Better error handling
       // Daha iyi hata yönetimi

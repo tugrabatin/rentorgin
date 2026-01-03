@@ -28,8 +28,10 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      // Login başarılı, AuthContext zaten redirect yapacak
-      router.push('/dashboard');
+      // Login başarılı, kısa bir gecikme ile redirect yap (state güncellenmesi için)
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 100);
     } catch (err: any) {
       setError(err.message || err.response?.data?.message || 'Giriş başarısız');
     } finally {
