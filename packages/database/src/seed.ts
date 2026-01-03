@@ -33,6 +33,21 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting database seed...');
 
+  // Clean existing seed data (optional - comment out if you want to keep existing data)
+  // Mevcut seed verilerini temizle (opsiyonel - mevcut verileri korumak istiyorsanız yorum satırı yapın)
+  try {
+    await prisma.storeAnalytics.deleteMany({});
+    await prisma.expense.deleteMany({});
+    await prisma.lease.deleteMany({});
+    await prisma.store.deleteMany({});
+    await prisma.mall.deleteMany({});
+    await prisma.user.deleteMany({});
+    await prisma.tenant.deleteMany({});
+    console.log('🧹 Cleaned existing seed data');
+  } catch (error) {
+    console.log('⚠️  Could not clean existing data (this is OK if database is empty)');
+  }
+
   // Create Demo Tenant
   const tenant = await prisma.tenant.upsert({
     where: { domain: 'demo-company' },
@@ -127,8 +142,10 @@ async function main() {
   console.log(`✅ Created malls: ${mallIstanbul.name}, ${mallAnkara.name}`);
 
   // Create Sample Stores
-  const store1 = await prisma.store.create({
-    data: {
+  const store1 = await prisma.store.upsert({
+    where: { code: 'FST-IST-001' },
+    update: {},
+    create: {
       tenantId: tenant.id,
       name: 'Fashion Store İstanbul',
       code: 'FST-IST-001',
@@ -145,8 +162,10 @@ async function main() {
     },
   });
 
-  const store2 = await prisma.store.create({
-    data: {
+  const store2 = await prisma.store.upsert({
+    where: { code: 'FST-ANK-001' },
+    update: {},
+    create: {
       tenantId: tenant.id,
       name: 'Fashion Store Ankara',
       code: 'FST-ANK-001',
@@ -166,8 +185,10 @@ async function main() {
   console.log(`✅ Created stores: ${store1.name}, ${store2.name}`);
 
   // Create Sample Leases
-  const lease1 = await prisma.lease.create({
-    data: {
+  const lease1 = await prisma.lease.upsert({
+    where: { contractNumber: 'CNT-2023-001' },
+    update: {},
+    create: {
       tenantId: tenant.id,
       storeId: store1.id,
       mallId: mallIstanbul.id,
@@ -191,8 +212,10 @@ async function main() {
     },
   });
 
-  const lease2 = await prisma.lease.create({
-    data: {
+  const lease2 = await prisma.lease.upsert({
+    where: { contractNumber: 'CNT-2023-002' },
+    update: {},
+    create: {
       tenantId: tenant.id,
       storeId: store2.id,
       mallId: mallAnkara.id,
