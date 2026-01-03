@@ -5,6 +5,8 @@ node_modules/
 
 # Testing
 coverage/
+test-results/
+playwright-report/
 *.log
 
 # Next.js
@@ -48,11 +50,17 @@ storage/sessions/*
 
 # Build
 *.tsbuildinfo
+dist 2/
+dist\ 2/
 
 # Misc
 .turbo/
 .vercel/
 *.pem
+
+# GitHub
+.github/actions/runner/
+.github/workflows/*.log
 
 
 
