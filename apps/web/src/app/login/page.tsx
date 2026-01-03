@@ -8,18 +8,26 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../auth-context';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Redirect to dashboard if already logged in
+  // Zaten giriş yapılmışsa dashboard'a yönlendir
+  useEffect(() => {
+    if (!isLoading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, isLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,16 +36,22 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      // Login başarılı, kısa bir gecikme ile redirect yap (state güncellenmesi için)
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 100);
+      // Login başarılı, user state güncellenecek ve useEffect redirect yapacak
     } catch (err: any) {
       setError(err.message || err.response?.data?.message || 'Giriş başarısız');
-    } finally {
       setLoading(false);
     }
   };
+
+  // Show loading if checking auth status
+  // Auth durumu kontrol ediliyorsa loading göster
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00d4ff]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">

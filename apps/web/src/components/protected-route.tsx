@@ -21,8 +21,15 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
 
   useEffect(() => {
+    // Only redirect if we're sure user is not authenticated
+    // Sadece kullanıcının kesinlikle authenticate olmadığından emin olduğumuzda redirect yap
     if (!isLoading && !user) {
-      router.push('/login');
+      // Check localStorage as fallback
+      // Fallback olarak localStorage'ı kontrol et
+      const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+      if (!token) {
+        router.push('/login');
+      }
     }
   }, [user, isLoading, router]);
 
@@ -35,7 +42,13 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   if (!user) {
-    return null; // Will redirect to login
+    // Still loading or redirecting - show loading state
+    // Hala yükleniyor veya yönlendiriliyor - loading state göster
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00d4ff]"></div>
+      </div>
+    );
   }
 
   return <>{children}</>;
