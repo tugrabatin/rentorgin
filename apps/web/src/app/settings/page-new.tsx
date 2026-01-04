@@ -9,13 +9,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '../auth-context';
+import { useAuth } from '../../contexts/auth-context';
 import { ProtectedRoute } from '../../components/protected-route';
 import { Navigation } from '../../components/navigation';
-import { GlassCard } from '@/components/ui/glass-card';
-import { GlassButton } from '@/components/ui/glass-button';
-import { GlassInput } from '@/components/ui/glass-input';
-import { GlassBadge } from '@/components/ui/glass-badge';
+import { GlassCard } from '../../components/ui/glass-card';
+import { GlassButton } from '../../components/ui/glass-button';
+import { GlassInput } from '../../components/ui/glass-input';
+import { GlassBadge } from '../../components/ui/glass-badge';
 import { Settings as SettingsIcon, Download, Upload, User, Shield, Bell, Globe } from 'lucide-react';
 import apiClient from '../../lib/api';
 

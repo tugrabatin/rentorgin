@@ -11,9 +11,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { ProtectedRoute } from '../../components/protected-route';
 import { Navigation } from '../../components/navigation';
-import { GlassCard } from '@/components/ui/glass-card';
-import { GlassButton } from '@/components/ui/glass-button';
-import { GlassInput } from '@/components/ui/glass-input';
+import { GlassCard } from '../../components/ui/glass-card';
+import { GlassButton } from '../../components/ui/glass-button';
+import { GlassInput } from '../../components/ui/glass-input';
 import { Bot, Send, Sparkles, Zap, FileText, TrendingUp, MapPin } from 'lucide-react';
 import apiClient from '../../lib/api';
 
@@ -29,7 +29,7 @@ function AIAssistantContent() {
     {
       id: '1',
       role: 'assistant',
-      content: 'Merhaba! Ben RentOrgin AI Asistanınızım. Size kira sözleşmeleri, lokasyon analizi ve optimizasyon konularında yardımcı olabilirim. Nasıl yardımcı olabilirim?',
+      content: 'Merhaba! Ben BASIS AI Asistanınızım. Size kira sözleşmeleri, lokasyon analizi ve optimizasyon konularında yardımcı olabilirim. Nasıl yardımcı olabilirim?',
       timestamp: new Date(),
     },
   ]);
