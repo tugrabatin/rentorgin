@@ -86,8 +86,10 @@ git commit -m "feat: prepare backend for Railway deployment"
 # ADIM 1: Railway CLI Kurulumu ve Login
 # ============================================
 # Railway CLI'yi kur (npx kullanarak, permission hatası yok)
-npx @railway/cli login
-# Browser açılacak, GitHub ile login ol
+npx @railway/cli login --browserless
+# Token isteyecek, Railway dashboard'dan token al:
+# 1. https://railway.app/dashboard → Settings → Tokens → Create Token
+# 2. Token'ı kopyala ve terminal'e yapıştır
 
 # ============================================
 # ADIM 2: Railway Projesi ve PostgreSQL Oluştur
