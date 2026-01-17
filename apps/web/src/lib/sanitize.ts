@@ -119,3 +119,4 @@ export function detectSqlInjection(input: string): boolean {
 
 
 
+

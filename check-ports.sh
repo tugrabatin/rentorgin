@@ -51,3 +51,4 @@ echo "3. Terminal loglarını kontrol edin"
 
 
 
+

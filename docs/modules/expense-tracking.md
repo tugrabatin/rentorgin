@@ -519,3 +519,4 @@ console.log(`Highest spending: ${highest.month}/${highest.year}`);
 
 
 
+

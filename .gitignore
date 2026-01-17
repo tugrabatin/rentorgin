@@ -52,6 +52,7 @@ storage/sessions/*
 # Misc
 .turbo/
 .vercel/
+.railway/
 *.pem
 
 
