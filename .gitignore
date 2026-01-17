@@ -73,3 +73,5 @@ storage/sessions/*
 
 
 rentorgin/
+.vercel
+.env*.local

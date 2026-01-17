@@ -35,6 +35,7 @@ async function bootstrap() {
   }));
 
   // Enable CORS (Strict)
+  // Production: Allow Vercel domains and custom domain
   const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:3001',
@@ -43,7 +44,12 @@ async function bootstrap() {
     'http://127.0.0.1:3001',
     'http://127.0.0.1:3002',
     process.env.FRONTEND_URL,
+    // Vercel preview and production domains (wildcard support)
+    ...(process.env.FRONTEND_URL ? [] : []), // Will be set via env
   ].filter(Boolean);
+  
+  // In production, also allow *.vercel.app domains if FRONTEND_URL is not set
+  const isProduction = process.env.NODE_ENV === 'production';
 
   app.enableCors({
     origin: (origin, callback) => {
@@ -55,12 +61,27 @@ async function bootstrap() {
       
       if (!origin) return callback(null, true);
       
+      // Check exact match first
       if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        logger.warn(`Blocked CORS request from origin: ${origin}`);
-        callback(new Error('Not allowed by CORS'));
+        return callback(null, true);
       }
+      
+      // In production, allow Vercel domains (*.vercel.app)
+      if (isProduction && origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+      
+      // Allow if FRONTEND_URL matches (with or without protocol)
+      if (process.env.FRONTEND_URL) {
+        const frontendUrl = process.env.FRONTEND_URL.replace(/^https?:\/\//, '');
+        const originHost = origin.replace(/^https?:\/\//, '').split('/')[0];
+        if (originHost === frontendUrl || originHost === frontendUrl.replace(/^https?:\/\//, '')) {
+          return callback(null, true);
+        }
+      }
+      
+      logger.warn(`Blocked CORS request from origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -103,14 +124,17 @@ async function bootstrap() {
 
   // Railway and most platforms use PORT, fallback to API_PORT or 3001
   const port = process.env.PORT || process.env.API_PORT || 3001;
-  await app.listen(port);
+  // Bind to 0.0.0.0 for production deployment (Railway, Render, etc.)
+  await app.listen(port, '0.0.0.0');
 
+  const host = isProduction ? '0.0.0.0' : 'localhost';
   console.log(`
     🚀 BASIS API is running!
-    📡 Port: ${port}
-    📚 API Docs: http://localhost:${port}/api/docs
+    📡 Listening on ${host}:${port}
+    📚 API Docs: http://${host}:${port}/api/docs
+    🏥 Health: http://${host}:${port}/api/v1/health
     🌍 Environment: ${process.env.NODE_ENV || 'development'}
-    📦 Version: 0.1.0
+    📦 Version: 0.4.0
   `);
 }
 
