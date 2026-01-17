@@ -1,6 +1,19 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "installCommand": "cd ../.. && npm install",
-  "framework": "nextjs"
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://YOUR-NETLIFY-APP.netlify.app/api/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ]
 }

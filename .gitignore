@@ -53,6 +53,7 @@ storage/sessions/*
 .turbo/
 .vercel/
 .railway/
+.netlify/
 *.pem
 
 

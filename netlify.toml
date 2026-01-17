@@ -1,0 +1,21 @@
+[build]
+  command = "npm install && npm run build --workspace=apps/api"
+  functions = "netlify/functions"
+  publish = ".netlify"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = [
+    "apps/api/dist/**",
+    "packages/**"
+  ]
