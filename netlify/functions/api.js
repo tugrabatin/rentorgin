@@ -1,14 +1,16 @@
 /**
  * Netlify Serverless Function Handler for NestJS
  * Wraps NestJS Express app for AWS Lambda/Netlify Functions
+ * Using CommonJS to avoid esbuild bundling issues
  */
 
-import { createApp } from '../../apps/api/src/serverless';
-import * as serverless from 'serverless-http';
+// Path to compiled serverless module
+const { createApp } = require('../../apps/api/dist/src/serverless');
+const serverless = require('serverless-http');
 
-let cachedApp: serverless.Handler;
+let cachedApp;
 
-export const handler = async (event: any, context: any) => {
+exports.handler = async (event, context) => {
   // Cache the app instance for better performance
   if (!cachedApp) {
     const expressApp = await createApp();

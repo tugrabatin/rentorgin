@@ -112,12 +112,16 @@ npx netlify-cli login
 # Netlify site oluştur (backend için)
 npx netlify-cli init
 # Sorular:
-# ✓ Create & configure a new site? → Yes
+# ✓ Select the project: @rentorgin/api (apps/api) --filter @rentorgin/api
+# ✓ What would you like to do? → Create & configure a new site
 # ✓ Team: (Hesabını seç)
 # ✓ Site name? → rentorgin-api (veya istediğin isim)
 # ✓ Build command: npm install && npm run build --workspace=apps/api
 # ✓ Directory to deploy: .netlify (veya boş bırak)
 # ✓ Netlify functions folder: netlify/functions
+
+# Eğer "No matching project found" hatası alırsan:
+# "What would you like to do?" sorusunda "Create & configure a new site" seç
 
 # Site URL'ini not et (örn: https://rentorgin-api.netlify.app)
 # BACKEND_URL="https://YOUR-SITE-NAME.netlify.app"

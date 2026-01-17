@@ -11,7 +11,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/http-exception.filter';
 import { LoggerService } from './common/logger.service';
 import helmet from 'helmet';
-import * as express from 'express';
+import express from 'express';
 
 export async function createApp() {
   const expressApp = express();

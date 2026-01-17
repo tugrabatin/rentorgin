@@ -47,6 +47,14 @@ export enum MallType {
   MIXED_USE = 'MIXED_USE',
 }
 
+// Relationship Quality
+export enum RelationshipQuality {
+  POOR = 'POOR',
+  FAIR = 'FAIR',
+  GOOD = 'GOOD',
+  EXCELLENT = 'EXCELLENT',
+}
+
 // Performance Recommendation
 export enum PerformanceRecommendation {
   CONTINUE = 'CONTINUE',

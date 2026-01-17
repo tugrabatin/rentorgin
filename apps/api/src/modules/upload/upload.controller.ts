@@ -16,11 +16,20 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
-import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UploadService } from './upload.service';
+
+// Serverless-compatible storage: use memory storage for Netlify Functions
+// Netlify Functions'da dosya sistemi read-only, memory storage kullan
+// Check if running in serverless environment (AWS Lambda / Netlify Functions)
+const isServerless = !!(
+  process.env.AWS_LAMBDA_FUNCTION_NAME || 
+  process.env.AWS_EXECUTION_ENV ||
+  process.env.NETLIFY ||
+  process.env.VERCEL
+);
 
 @ApiTags('upload')
 @Controller('upload')
@@ -34,16 +43,10 @@ export class UploadController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './storage/uploads',
-        filename: (req, file, cb) => {
-          const randomName = Array(32)
-            .fill(null)
-            .map(() => Math.round(Math.random() * 16).toString(16))
-            .join('');
-          cb(null, `${randomName}${extname(file.originalname)}`);
-        },
-      }),
+      // Serverless ortamda memory storage kullan (disk storage read-only)
+      // Netlify Functions'da dosya sistemi read-only, bu yüzden memory storage kullan
+      // Always use memory storage in production/serverless to avoid filesystem issues
+      storage: undefined, // undefined = memory storage (works in both serverless and regular)
       limits: {
         fileSize: 50 * 1024 * 1024, // 50MB
       },
@@ -84,12 +87,18 @@ export class UploadController {
       throw new BadRequestException('No file uploaded');
     }
 
+    // Serverless ortamda file.buffer kullan (memory storage)
+    // Production'da file.path kullan (disk storage)
+    const filename = file.filename || `${Array(32).fill(null).map(() => Math.round(Math.random() * 16).toString(16)).join('')}${extname(file.originalname)}`;
+    const path = isServerless ? `/tmp/${filename}` : (file.path || `./storage/uploads/${filename}`);
+
     return this.uploadService.saveFileMetadata({
-      filename: file.filename,
+      filename,
       originalName: file.originalname,
       mimeType: file.mimetype,
       size: file.size,
-      path: file.path,
+      path,
+      buffer: isServerless ? file.buffer : undefined, // Memory storage için buffer
       tenantId: user.tenantId,
       uploadedBy: user.userId,
     });

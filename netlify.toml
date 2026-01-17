@@ -1,7 +1,6 @@
 [build]
   command = "npm install && npm run build --workspace=apps/api"
   functions = "netlify/functions"
-  publish = ".netlify"
 
 [build.environment]
   NODE_VERSION = "20"
