@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && cd packages/core-domain && npx -p typescript tsc && cd ../database && npx prisma generate && cd ../../apps/api && npx @nestjs/cli build"
+  command = "git submodule deinit -f rentorgin 2>/dev/null || true && git config --global --remove-section submodule.rentorgin 2>/dev/null || true && rm -rf rentorgin .git/modules/rentorgin 2>/dev/null || true && npm install && cd packages/core-domain && npx -p typescript tsc && cd ../database && npx prisma generate && cd ../../apps/api && npx @nestjs/cli build"
   functions = "netlify/functions"
 
 [build.environment]
