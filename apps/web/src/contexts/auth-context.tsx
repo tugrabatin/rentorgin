@@ -41,20 +41,30 @@ interface RegisterData {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // DISABLED: Mock user for deployment without authentication
+  // DEVRE DIŞI: Authentication olmadan deploy için mock user
+  const [user, setUser] = useState<User | null>({
+    id: 'demo-user',
+    email: 'demo@example.com',
+    firstName: 'Demo',
+    lastName: 'User',
+    role: 'ADMIN',
+    tenantId: 'demo-tenant',
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  // Check if user is authenticated on mount
-  // Mount'ta kullanıcının kimliği doğrulanmış mı kontrol et
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      loadUser();
-    } else {
-      setIsLoading(false);
-    }
-  }, []);
+  // Original code (disabled):
+  // const [user, setUser] = useState<User | null>(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  // useEffect(() => {
+  //   const token = localStorage.getItem('accessToken');
+  //   if (token) {
+  //     loadUser();
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+  // }, []);
 
   // Load user profile
   // Kullanıcı profilini yükle

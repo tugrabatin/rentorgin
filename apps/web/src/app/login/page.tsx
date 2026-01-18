@@ -9,6 +9,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../../contexts/auth-context';
 import Link from 'next/link';
 import { LogIn, Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react';
@@ -20,29 +21,34 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [backendStatus, setBackendStatus] = useState<'checking' | 'online' | 'offline'>('checking');
+  const router = useRouter();
 
-  // Check backend status on mount
+  // DISABLED: Redirect to dashboard automatically (authentication bypassed)
+  // DEVRE DIŞI: Otomatik olarak dashboard'a yönlendir (authentication bypass edildi)
   useEffect(() => {
-    const checkBackend = async () => {
-      try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api/v1';
-        const response = await fetch(`${apiUrl}/health`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        
-        if (response.ok) {
-          setBackendStatus('online');
-        } else {
-          setBackendStatus('offline');
-        }
-      } catch (err) {
-        setBackendStatus('offline');
-      }
-    };
+    router.push('/dashboard');
+  }, [router]);
 
-    checkBackend();
-  }, []);
+  // Original code (disabled):
+  // useEffect(() => {
+  //   const checkBackend = async () => {
+  //     try {
+  //       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api/v1';
+  //       const response = await fetch(`${apiUrl}/health`, {
+  //         method: 'GET',
+  //         headers: { 'Content-Type': 'application/json' },
+  //       });
+  //       if (response.ok) {
+  //         setBackendStatus('online');
+  //       } else {
+  //         setBackendStatus('offline');
+  //       }
+  //     } catch (err) {
+  //       setBackendStatus('offline');
+  //     }
+  //   };
+  //   checkBackend();
+  // }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

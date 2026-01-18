@@ -14,22 +14,17 @@ import type { NextRequest } from 'next/server';
 const publicRoutes = ['/', '/login', '/register'];
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  // Check if route is public
-  // Rotanın public olup olmadığını kontrol et
-  const isPublicRoute = publicRoutes.some(route => pathname === route);
-
-  if (isPublicRoute) {
-    return NextResponse.next();
-  }
-
-  // For protected routes, check for token in cookies or redirect to login
-  // Korumalı rotalar için cookie'de token kontrolü yap veya login'e yönlendir
-  // Note: In production, you should verify the JWT here
-  // Not: Production'da JWT'yi burada doğrulamalısınız
-  
+  // DISABLED: All routes are public for deployment
+  // DEVRE DIŞI: Deploy için tüm route'lar public
   return NextResponse.next();
+  
+  // Original code (disabled):
+  // const { pathname } = request.nextUrl;
+  // const isPublicRoute = publicRoutes.some(route => pathname === route);
+  // if (isPublicRoute) {
+  //   return NextResponse.next();
+  // }
+  // return NextResponse.next();
 }
 
 export const config = {
