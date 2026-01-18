@@ -1,0 +1,2 @@
+# Empty .gitmodules file to prevent Netlify submodule checkout errors
+# rentorgin submodule was removed, this file prevents build errors
