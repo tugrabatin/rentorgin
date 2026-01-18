@@ -82,7 +82,7 @@ export class UploadController {
       },
     }),
   )
-  uploadContract(@UploadedFile() file: Express.Multer.File, @CurrentUser() user: any) {
+  uploadContract(@UploadedFile() file: any, @CurrentUser() user: any) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }

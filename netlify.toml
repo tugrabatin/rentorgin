@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run build --workspace=apps/api"
+  command = "npm install && cd packages/core-domain && npx -p typescript tsc && cd ../database && npx prisma generate && cd ../../apps/api && npx @nestjs/cli build"
   functions = "netlify/functions"
 
 [build.environment]
