@@ -1,6 +1,7 @@
 [build]
   command = "npm install && cd packages/core-domain && npx -p typescript tsc && cd ../database && npx prisma generate && cd ../../apps/api && npx @nestjs/cli build"
   functions = "netlify/functions"
+  ignore = "git diff --quiet HEAD^ HEAD ."
 
 [build.environment]
   NODE_VERSION = "20"
