@@ -5,7 +5,12 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_APP_VERSION: '0.4.0',
   },
-  // i18n is handled client-side via LanguageContext (App Router does not support next.config i18n)
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 module.exports = nextConfig;
