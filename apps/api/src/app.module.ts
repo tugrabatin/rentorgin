@@ -25,6 +25,7 @@ import { ExpensesModule } from './modules/expenses/expenses.module';
 import { LeasingManagerModule } from './modules/leasing-manager/leasing-manager.module';
 import { BudgetModule } from './modules/budget/budget.module';
 import { RiskModule } from './modules/risk/risk.module';
+import { TenantModule } from './modules/tenant/tenant.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -58,6 +59,7 @@ import { AppController } from './app.controller';
     LeasingManagerModule,
     BudgetModule,
     RiskModule,
+    TenantModule,
   ],
   controllers: [AppController],
   providers: [

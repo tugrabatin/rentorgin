@@ -39,6 +39,9 @@ export * from './dtos/analytics.dto';
 export * from './enums';
 export * from './constants';
 
+// Segment UI Configuration
+export * from './config/segment-ui-config';
+
 
 
 

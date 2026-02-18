@@ -1,9 +1,6 @@
 /**
  * App Providers
- * React Query, Auth, Theme, Language and global state providers
- * 
- * Uygulama Sağlayıcıları
- * React Query, Auth, Tema, Dil ve global durum sağlayıcıları
+ * React Query, Auth, Theme, Language, Segment and global state providers
  */
 
 'use client';
@@ -13,6 +10,8 @@ import { useState } from 'react';
 import { AuthProvider } from '../contexts/auth-context';
 import { ThemeProvider } from '../contexts/theme-context';
 import { LanguageProvider } from '../contexts/language-context';
+import { SegmentProvider } from '../contexts/segment-context';
+import { SegmentGate } from '../components/segment-gate';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -32,11 +31,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ThemeProvider>
         <LanguageProvider>
           <AuthProvider>
-            {children}
+            <SegmentProvider>
+              <SegmentGate>
+                {children}
+              </SegmentGate>
+            </SegmentProvider>
           </AuthProvider>
         </LanguageProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
 }
-

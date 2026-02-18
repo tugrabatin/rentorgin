@@ -19,6 +19,7 @@ interface User {
   lastName: string;
   role: string;
   tenantId: string;
+  customerSegment: string | null;
 }
 
 interface AuthContextType {
@@ -36,6 +37,7 @@ interface RegisterData {
   password: string;
   firstName: string;
   lastName: string;
+  customerSegment?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -50,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     lastName: 'User',
     role: 'ADMIN',
     tenantId: 'demo-tenant',
+    customerSegment: null,
   });
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();

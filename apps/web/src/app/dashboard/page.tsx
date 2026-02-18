@@ -13,6 +13,7 @@ import { DashboardKpiRow } from '../../components/dashboard/dashboard-kpi-row';
 import { DashboardEventsAndTasks } from '../../components/dashboard/dashboard-events-and-tasks';
 import { DashboardAnalyticsOverview } from '../../components/dashboard/dashboard-analytics-overview';
 import { DashboardQuickActions } from '../../components/dashboard/dashboard-quick-actions';
+import { DashboardSegmentCards } from '../../components/dashboard/dashboard-segment-cards';
 import { 
   Sparkles,
   Zap
@@ -55,6 +56,9 @@ function DashboardContent() {
               </p>
             </div>
           </div>
+
+          {/* BLOCK 0: Segment-based Priority Cards */}
+          <DashboardSegmentCards />
 
           {/* BLOCK 1: Üst Özet Alanı - KPI Row */}
           <div>

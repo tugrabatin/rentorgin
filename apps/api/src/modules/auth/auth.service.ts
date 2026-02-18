@@ -77,6 +77,7 @@ export class AuthService {
         lastName: user.lastName,
         role: user.role,
         tenantId: user.tenantId,
+        customerSegment: user.tenant?.customerSegment ?? null,
         tenant: user.tenant ? {
           id: user.tenant.id,
           name: user.tenant.name,
@@ -110,14 +111,16 @@ export class AuthService {
     let tenantId = registerDto.tenantId;
     
     if (!tenantId) {
-      // Create default tenant for new user
-      // Yeni kullanıcı için varsayılan tenant oluştur
       const tenant = await this.prisma.tenant.create({
         data: {
           name: `${registerDto.firstName}'s Organization`,
           domain: registerDto.email.split('@')[0],
           plan: 'FREE',
           status: 'ACTIVE',
+          ...(registerDto.customerSegment && {
+            customerSegment: registerDto.customerSegment,
+            segmentUpdatedAt: new Date(),
+          }),
         },
       });
       tenantId = tenant.id;
@@ -151,6 +154,7 @@ export class AuthService {
         lastName: user.lastName,
         role: user.role,
         tenantId: user.tenantId,
+        customerSegment: user.tenant?.customerSegment ?? null,
       },
     };
   }

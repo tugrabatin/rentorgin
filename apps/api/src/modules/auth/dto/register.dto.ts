@@ -6,8 +6,9 @@
  * Kullanıcı kaydı için istek payload'ı
  */
 
-import { IsEmail, IsString, MinLength, IsOptional } from 'class-validator';
+import { IsEmail, IsString, MinLength, IsOptional, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { CustomerSegmentEnum } from '../../tenant/dto/update-segment.dto';
 
 export class RegisterDto {
   @ApiProperty({
@@ -48,6 +49,18 @@ export class RegisterDto {
   @IsOptional()
   @IsString()
   tenantId?: string;
+
+  @ApiProperty({
+    enum: CustomerSegmentEnum,
+    example: 'A1_SOLO_MARKA',
+    description: 'Customer segment for new tenant (required for new signups) / Yeni kayıtlar için müşteri segmenti (zorunlu)',
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(CustomerSegmentEnum, {
+    message: 'customerSegment must be a valid segment identifier',
+  })
+  customerSegment?: CustomerSegmentEnum;
 }
 
 

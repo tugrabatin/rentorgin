@@ -1,0 +1,772 @@
+{
+  "meta": {
+    "version": "0.5.0",
+    "generated": "2026-02-16",
+    "totalFeatures": 21,
+    "totalPlanned": 10
+  },
+  "features": [
+    {
+      "id": "auth",
+      "name": "Authentication & Authorization",
+      "name_tr": "Kimlik Doğrulama ve Yetkilendirme",
+      "status": "ga",
+      "version": "0.4.0",
+      "domain": "core",
+      "entrypoints": {
+        "api": [
+          "POST /api/v1/auth/login",
+          "POST /api/v1/auth/register",
+          "POST /api/v1/auth/refresh",
+          "GET /api/v1/auth/profile",
+          "POST /api/v1/auth/logout"
+        ],
+        "ui": ["/login", "/register"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/auth/auth.controller.ts:1-96",
+        "service": "apps/api/src/modules/auth/auth.service.ts",
+        "ui_pages": ["apps/web/src/app/login/page.tsx", "apps/web/src/app/register/page.tsx"],
+        "schema": "packages/database/prisma/schema.prisma:77-108",
+        "docs": ["docs/auth-implementation.md"]
+      },
+      "security": {
+        "bcrypt": true,
+        "jwt": true,
+        "rateLimiting": true,
+        "multiTenant": true
+      },
+      "tests": {
+        "unit": false,
+        "e2e": true,
+        "coverage": 20
+      }
+    },
+    {
+      "id": "stores",
+      "name": "Store Management",
+      "name_tr": "Mağaza Yönetimi",
+      "status": "ga",
+      "version": "0.2.0",
+      "domain": "core",
+      "entrypoints": {
+        "api": [
+          "GET /api/v1/stores",
+          "GET /api/v1/stores/:id",
+          "POST /api/v1/stores",
+          "PUT /api/v1/stores/:id",
+          "DELETE /api/v1/stores/:id",
+          "GET /api/v1/stores/statistics"
+        ],
+        "ui": ["/stores", "/stores/:id", "/stores/create", "/stores/:id/edit"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/stores/stores.controller.ts:1-92",
+        "service": "apps/api/src/modules/stores/stores.service.ts",
+        "ui_pages": ["apps/web/src/app/stores/page.tsx", "apps/web/src/app/stores/[id]/page.tsx"],
+        "schema": "packages/database/prisma/schema.prisma:128-168"
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "leases",
+      "name": "Lease Contract Management",
+      "name_tr": "Kira Sözleşmesi Yönetimi",
+      "status": "ga",
+      "version": "0.2.0",
+      "domain": "core",
+      "entrypoints": {
+        "api": [
+          "GET /api/v1/leases",
+          "GET /api/v1/leases/expiring",
+          "GET /api/v1/leases/:id",
+          "GET /api/v1/leases/:id/current-rent",
+          "POST /api/v1/leases",
+          "PUT /api/v1/leases/:id",
+          "POST /api/v1/leases/:id/renew"
+        ],
+        "ui": ["/leases", "/leases/:id", "/leases/create"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/leases/leases.controller.ts:1-75",
+        "service": "apps/api/src/modules/leases/leases.service.ts",
+        "ui_pages": ["apps/web/src/app/leases/page.tsx", "apps/web/src/app/leases/[id]/page.tsx"],
+        "schema": "packages/database/prisma/schema.prisma:251-314"
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "malls",
+      "name": "Mall Relations Management",
+      "name_tr": "AVM İlişkileri Yönetimi",
+      "status": "ga",
+      "version": "0.1.0",
+      "domain": "core",
+      "entrypoints": {
+        "api": [
+          "GET /api/v1/malls",
+          "GET /api/v1/malls/:id",
+          "POST /api/v1/malls",
+          "PUT /api/v1/malls/:id/relationship"
+        ],
+        "ui": ["/malls", "/malls/:id"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/malls/malls.controller.ts:1-54",
+        "service": "apps/api/src/modules/malls/malls.service.ts",
+        "ui_pages": ["apps/web/src/app/malls/page.tsx", "apps/web/src/app/malls/[id]/page.tsx"],
+        "schema": "packages/database/prisma/schema.prisma:178-209"
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "expenses",
+      "name": "Expense Tracking",
+      "name_tr": "Gider Takibi",
+      "status": "ga",
+      "version": "0.3.0",
+      "domain": "finance",
+      "entrypoints": {
+        "api": [
+          "POST /api/v1/expenses",
+          "GET /api/v1/expenses",
+          "GET /api/v1/expenses/:id",
+          "PUT /api/v1/expenses/:id",
+          "PUT /api/v1/expenses/:id/mark-paid",
+          "DELETE /api/v1/expenses/:id",
+          "GET /api/v1/expenses/statistics",
+          "GET /api/v1/expenses/monthly-summary",
+          "GET /api/v1/expenses/overdue"
+        ],
+        "ui": ["/expenses", "/expenses/:id", "/expenses/create", "/expenses/analytics"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/expenses/expenses.controller.ts:1-153",
+        "service": "apps/api/src/modules/expenses/expenses.service.ts",
+        "ui_pages": ["apps/web/src/app/expenses/page.tsx"],
+        "schema": "packages/database/prisma/schema.prisma:585-625",
+        "docs": ["docs/modules/expense-tracking.md", "EXPENSE_MODULE_COMPLETE.md"]
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "budget",
+      "name": "Budget Management",
+      "name_tr": "Bütçe Yönetimi",
+      "status": "ga",
+      "version": "0.3.0",
+      "domain": "finance",
+      "entrypoints": {
+        "api": [
+          "POST /api/v1/budget",
+          "GET /api/v1/budget",
+          "GET /api/v1/budget/:id",
+          "PUT /api/v1/budget/:id",
+          "DELETE /api/v1/budget/:id",
+          "GET /api/v1/budget/statistics",
+          "GET /api/v1/budget/vs-actual"
+        ],
+        "ui": ["/budget", "/budget/:id", "/budget/create"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/budget/budget.controller.ts:1-118",
+        "service": "apps/api/src/modules/budget/budget.service.ts",
+        "schema": "packages/database/prisma/schema.prisma:763-791"
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "risk",
+      "name": "Risk Management",
+      "name_tr": "Risk Yönetimi",
+      "status": "ga",
+      "version": "0.3.0",
+      "domain": "operations",
+      "entrypoints": {
+        "api": [
+          "POST /api/v1/risk",
+          "GET /api/v1/risk",
+          "GET /api/v1/risk/:id",
+          "PUT /api/v1/risk/:id",
+          "DELETE /api/v1/risk/:id",
+          "GET /api/v1/risk/statistics",
+          "GET /api/v1/risk/score"
+        ],
+        "ui": ["/risk", "/risk/:id", "/risk/create"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/risk/risk.controller.ts:1-110",
+        "service": "apps/api/src/modules/risk/risk.service.ts",
+        "schema": "packages/database/prisma/schema.prisma:808-840"
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "analytics",
+      "name": "Analytics & Reporting",
+      "name_tr": "Analitik ve Raporlama",
+      "status": "ga",
+      "version": "0.1.0",
+      "domain": "insights",
+      "entrypoints": {
+        "api": [
+          "GET /api/v1/analytics/stores/:storeId",
+          "GET /api/v1/analytics/portfolio",
+          "POST /api/v1/analytics/calculate",
+          "GET /api/v1/analytics/compare"
+        ],
+        "ui": ["/analytics", "/dashboard"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/analytics/analytics.controller.ts:1-55",
+        "service": "apps/api/src/modules/analytics/analytics.service.ts",
+        "ui_pages": ["apps/web/src/app/analytics/page.tsx", "apps/web/src/app/dashboard/page.tsx"],
+        "schema": "packages/database/prisma/schema.prisma:470-509"
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "ai-assistant",
+      "name": "AI Assistant",
+      "name_tr": "Yapay Zeka Asistanı",
+      "status": "beta",
+      "version": "0.1.0",
+      "domain": "ai",
+      "entrypoints": {
+        "api": [
+          "POST /api/v1/ai-assistant/execute",
+          "POST /api/v1/ai-assistant/feedback"
+        ],
+        "ui": ["/ai-assistant"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/ai-assistant/ai-assistant.controller.ts:1-42",
+        "service": "apps/api/src/modules/ai-assistant/ai-assistant.service.ts",
+        "schema": "packages/database/prisma/schema.prisma:864-902"
+      },
+      "notes": "Scaffold only, OpenAI integration incomplete",
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "translation",
+      "name": "Translation Engine",
+      "name_tr": "Çeviri Motoru",
+      "status": "beta",
+      "version": "0.1.0",
+      "domain": "ai",
+      "entrypoints": {
+        "api": [
+          "POST /api/v1/translation/start",
+          "GET /api/v1/translation/jobs/:jobId",
+          "GET /api/v1/translation/jobs/:jobId/progress"
+        ],
+        "ui": ["/translation"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/translation/translation.controller.ts:1-48",
+        "service": "apps/api/src/modules/translation/translation.service.ts",
+        "schema": "packages/database/prisma/schema.prisma:908-980"
+      },
+      "notes": "Backend ready, UI incomplete",
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "leasing-manager",
+      "name": "Leasing Manager Tools",
+      "name_tr": "Kiralama Yöneticisi Araçları",
+      "status": "ga",
+      "version": "0.3.0",
+      "domain": "operations",
+      "subFeatures": [
+        "Leasing Tasks",
+        "Franchise Projects",
+        "Leasing Requests",
+        "Job Descriptions"
+      ],
+      "entrypoints": {
+        "api": [
+          "GET /api/v1/leasing-manager/tasks",
+          "GET /api/v1/leasing-manager/franchise-projects",
+          "GET /api/v1/leasing-manager/requests",
+          "GET /api/v1/leasing-manager/job-descriptions",
+          "GET /api/v1/leasing-manager/dashboard"
+        ],
+        "ui": ["/leasing-manager"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/leasing-manager/leasing-manager.controller.ts:1-273",
+        "services": [
+          "apps/api/src/modules/leasing-manager/leasing-tasks.service.ts",
+          "apps/api/src/modules/leasing-manager/franchise-projects.service.ts",
+          "apps/api/src/modules/leasing-manager/leasing-requests.service.ts",
+          "apps/api/src/modules/leasing-manager/job-descriptions.service.ts"
+        ],
+        "schema": "packages/database/prisma/schema.prisma:1051-1415",
+        "tests": "apps/api/src/modules/leasing-manager/__tests__/"
+      },
+      "tests": {
+        "unit": true,
+        "e2e": false,
+        "coverage": 10
+      }
+    },
+    {
+      "id": "file-upload",
+      "name": "File Upload",
+      "name_tr": "Dosya Yükleme",
+      "status": "ga",
+      "version": "0.1.0",
+      "domain": "infrastructure",
+      "entrypoints": {
+        "api": ["POST /api/v1/upload/contract"]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/upload/upload.controller.ts:1-110",
+        "service": "apps/api/src/modules/upload/upload.service.ts",
+        "component": "apps/web/src/components/file-upload.tsx"
+      },
+      "security": {
+        "fileTypeWhitelist": ["PDF", "DOC", "DOCX"],
+        "mimeTypeCheck": true,
+        "filenameSanitization": true,
+        "sizeLimit": "50MB"
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "session-management",
+      "name": "Session Management",
+      "name_tr": "Oturum Yönetimi",
+      "status": "beta",
+      "version": "0.1.0",
+      "domain": "infrastructure",
+      "entrypoints": {
+        "api": [
+          "POST /api/v1/session/export",
+          "POST /api/v1/session/import",
+          "GET /api/v1/session/user/:userId",
+          "GET /api/v1/session/:sessionId"
+        ]
+      },
+      "evidence": {
+        "controller": "apps/api/src/modules/session/session.controller.ts:1-54",
+        "service": "apps/api/src/modules/session/session.service.ts",
+        "schema": "packages/database/prisma/schema.prisma:994-1018"
+      },
+      "notes": "Minimal implementation, UI integration incomplete",
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "multi-tenant",
+      "name": "Multi-Tenant Architecture",
+      "name_tr": "Çoklu Tenant Mimari",
+      "status": "ga",
+      "version": "0.1.0",
+      "domain": "infrastructure",
+      "entrypoints": {
+        "api": ["All endpoints (automatic)"]
+      },
+      "evidence": {
+        "middleware": "apps/api/src/database/prisma.service.ts",
+        "strategy": "apps/api/src/modules/auth/strategies/jwt.strategy.ts",
+        "schema": "packages/database/prisma/schema.prisma (tenantId in all models)"
+      },
+      "security": {
+        "rowLevelIsolation": true,
+        "automaticFiltering": true,
+        "jwtBased": true
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "rate-limiting",
+      "name": "Rate Limiting & Throttling",
+      "name_tr": "Hız Limitleme",
+      "status": "ga",
+      "version": "0.1.0",
+      "domain": "security",
+      "entrypoints": {
+        "api": ["All endpoints (automatic)"]
+      },
+      "evidence": {
+        "config": "apps/api/src/app.module.ts:39-42",
+        "overrides": "apps/api/src/modules/auth/auth.controller.ts:26,39"
+      },
+      "config": {
+        "global": "100 requests/minute",
+        "login": "throttle disabled (dev)",
+        "register": "3 requests/hour"
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "security-headers",
+      "name": "Security Headers (Helmet)",
+      "name_tr": "Güvenlik Başlıkları",
+      "status": "ga",
+      "version": "0.1.0",
+      "domain": "security",
+      "entrypoints": {
+        "api": ["All endpoints (automatic)"]
+      },
+      "evidence": {
+        "config": "apps/api/src/main.ts:24-35"
+      },
+      "features": ["CSP", "X-Frame-Options", "X-Content-Type-Options"],
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "cors",
+      "name": "CORS Configuration",
+      "name_tr": "CORS Yapılandırma",
+      "status": "ga",
+      "version": "0.1.0",
+      "domain": "security",
+      "entrypoints": {
+        "api": ["All endpoints (automatic)"]
+      },
+      "evidence": {
+        "config": "apps/api/src/main.ts:37-89"
+      },
+      "config": {
+        "development": "All origins",
+        "production": "Whitelist + *.vercel.app wildcard"
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "logging",
+      "name": "Logging & Error Tracking",
+      "name_tr": "Loglama ve Hata Takibi",
+      "status": "ga",
+      "version": "0.1.0",
+      "domain": "observability",
+      "entrypoints": {
+        "api": ["All endpoints (automatic)"]
+      },
+      "evidence": {
+        "logger": "apps/api/src/common/logger.service.ts",
+        "filter": "apps/api/src/common/http-exception.filter.ts",
+        "sentry": "apps/api/src/common/sentry.service.ts"
+      },
+      "notes": "Sentry integration ready but not enabled by default",
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "swagger",
+      "name": "Swagger API Documentation",
+      "name_tr": "Swagger API Dokümantasyonu",
+      "status": "ga",
+      "version": "0.1.0",
+      "domain": "developer-tools",
+      "entrypoints": {
+        "ui": ["/api/docs"]
+      },
+      "evidence": {
+        "config": "apps/api/src/main.ts:106-123"
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "glassmorphic-design",
+      "name": "Glassmorphic Design System",
+      "name_tr": "Glassmorphic Tasarım Sistemi",
+      "status": "ga",
+      "version": "0.2.5",
+      "domain": "ui-ux",
+      "entrypoints": {
+        "ui": ["/settings"]
+      },
+      "evidence": {
+        "settings": "apps/web/src/app/settings/page.tsx",
+        "components": [
+          "apps/web/src/components/ui/glass-card.tsx",
+          "apps/web/src/components/ui/glass-button.tsx",
+          "apps/web/src/components/ui/glass-table.tsx",
+          "apps/web/src/components/ui/theme-selector.tsx"
+        ],
+        "docs": ["GLASSMORPHIC_REDESIGN.md", "DESIGN_SYSTEM.md"]
+      },
+      "features": ["4 themes", "TR/EN language selector", "Glassmorphic components"],
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    },
+    {
+      "id": "dashboard",
+      "name": "Dashboard & Analytics UI",
+      "name_tr": "Dashboard ve Analitik UI",
+      "status": "ga",
+      "version": "0.2.0",
+      "domain": "ui-ux",
+      "entrypoints": {
+        "ui": ["/", "/dashboard"]
+      },
+      "evidence": {
+        "pages": ["apps/web/src/app/page.tsx", "apps/web/src/app/dashboard/page.tsx"],
+        "components": [
+          "apps/web/src/components/dashboard/dashboard-kpi-row.tsx",
+          "apps/web/src/components/dashboard/dashboard-events-and-tasks.tsx",
+          "apps/web/src/components/dashboard/dashboard-quick-actions.tsx"
+        ],
+        "docs": ["DASHBOARD_REDESIGN_COMPLETE.md"]
+      },
+      "tests": {
+        "unit": false,
+        "e2e": false,
+        "coverage": 0
+      }
+    }
+  ],
+  "plannedFeatures": [
+    {
+      "id": "ai-advanced",
+      "name": "Advanced AI Features",
+      "name_tr": "Gelişmiş AI Özellikleri",
+      "status": "planned",
+      "targetVersion": "0.2.0",
+      "priority": "P0",
+      "evidence": {
+        "roadmap": "ROADMAP.md:106-124"
+      },
+      "scope": [
+        "OpenAI API integration (complete)",
+        "Chat interface",
+        "Context injection",
+        "Streaming responses",
+        "Chat history"
+      ]
+    },
+    {
+      "id": "translation-ui",
+      "name": "Translation Engine UI",
+      "name_tr": "Çeviri Motoru UI",
+      "status": "planned",
+      "targetVersion": "0.3.0",
+      "priority": "P1",
+      "evidence": {
+        "roadmap": "ROADMAP.md:163-169"
+      },
+      "scope": [
+        "Upload interface",
+        "Progress bar",
+        "Job queue management",
+        "Quality metrics display"
+      ]
+    },
+    {
+      "id": "email-notifications",
+      "name": "Email Notifications",
+      "name_tr": "Email Bildirimleri",
+      "status": "planned",
+      "targetVersion": "0.3.0",
+      "priority": "P1",
+      "evidence": {
+        "roadmap": "ROADMAP.md:188-192",
+        "nextSteps": "NEXT_STEPS.md:206-218"
+      },
+      "scope": ["SMTP setup", "Email templates", "Lease reminders", "Budget alerts"]
+    },
+    {
+      "id": "advanced-charts",
+      "name": "Advanced Charts & Visualization",
+      "name_tr": "Gelişmiş Grafikler ve Görselleştirme",
+      "status": "planned",
+      "targetVersion": "0.2.0",
+      "priority": "P1",
+      "evidence": {
+        "roadmap": "ROADMAP.md:88-105"
+      },
+      "scope": ["Recharts library", "Time series charts", "Export to PDF"]
+    },
+    {
+      "id": "password-reset",
+      "name": "Password Reset Flow",
+      "name_tr": "Şifre Sıfırlama",
+      "status": "planned",
+      "targetVersion": "0.2.0",
+      "priority": "P1",
+      "evidence": {
+        "roadmap": "ROADMAP.md:75-76"
+      },
+      "scope": ["Reset token generation", "Email sending", "Reset form UI"]
+    },
+    {
+      "id": "2fa",
+      "name": "Two-Factor Authentication",
+      "name_tr": "İki Faktörlü Kimlik Doğrulama",
+      "status": "planned",
+      "targetVersion": "0.5.0",
+      "priority": "P2",
+      "evidence": {
+        "nextSteps": "NEXT_STEPS.md:440"
+      },
+      "scope": ["TOTP-based 2FA", "QR code generation", "Backup codes"]
+    },
+    {
+      "id": "mobile-app",
+      "name": "Mobile App",
+      "name_tr": "Mobil Uygulama",
+      "status": "planned",
+      "targetVersion": "2.0.0",
+      "priority": "P3",
+      "evidence": {
+        "roadmap": "ROADMAP.md:258-263"
+      },
+      "scope": ["React Native", "Offline mode", "Push notifications"],
+      "risks": ["HIGH effort (3-6 months)", "Platform-specific bugs", "Sync conflicts"]
+    },
+    {
+      "id": "saas-features",
+      "name": "Multi-Tenant SaaS Features",
+      "name_tr": "SaaS Özellikleri",
+      "status": "planned",
+      "targetVersion": "2.0.0",
+      "priority": "P3",
+      "evidence": {
+        "roadmap": "ROADMAP.md:245-251"
+      },
+      "scope": [
+        "Tenant onboarding",
+        "Subscription management",
+        "Stripe integration",
+        "Admin panel"
+      ],
+      "risks": ["HIGH complexity", "Payment compliance (PCI-DSS)"]
+    },
+    {
+      "id": "testing-suite",
+      "name": "Comprehensive Testing Suite",
+      "name_tr": "Kapsamlı Test Paketi",
+      "status": "planned",
+      "targetVersion": "0.3.0",
+      "priority": "P0",
+      "evidence": {
+        "nextSteps": "NEXT_STEPS.md:42-84"
+      },
+      "scope": [
+        "Unit tests (70% coverage)",
+        "Integration tests",
+        "E2E tests (Playwright)",
+        "Performance tests"
+      ],
+      "critical": true
+    },
+    {
+      "id": "monitoring-observability",
+      "name": "Production Monitoring & Observability",
+      "name_tr": "Üretim İzleme ve Gözlemlenebilirlik",
+      "status": "planned",
+      "targetVersion": "0.3.0",
+      "priority": "P0",
+      "evidence": {
+        "nextSteps": "NEXT_STEPS.md:88-94"
+      },
+      "scope": [
+        "Sentry error tracking",
+        "Performance monitoring",
+        "User session tracking",
+        "Alert configuration"
+      ],
+      "critical": true
+    }
+  ],
+  "statistics": {
+    "totalFeatures": 21,
+    "byStatus": {
+      "ga": 18,
+      "beta": 3,
+      "experimental": 0
+    },
+    "byDomain": {
+      "core": 4,
+      "finance": 2,
+      "operations": 2,
+      "insights": 1,
+      "ai": 2,
+      "infrastructure": 3,
+      "security": 3,
+      "observability": 1,
+      "developerTools": 1,
+      "uiUx": 2
+    },
+    "testCoverage": {
+      "overall": 5,
+      "unitTests": 1,
+      "e2eTests": 1,
+      "integrationTests": 0
+    },
+    "plannedFeatures": 10,
+    "criticalGaps": ["tests", "monitoring", "cicd", "backups", "performance"]
+  }
+}

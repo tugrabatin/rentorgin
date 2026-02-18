@@ -76,6 +76,72 @@ export const SUPPORTED_CURRENCIES = ['TRY', 'USD', 'EUR', 'GBP'] as const;
 // Languages
 export const SUPPORTED_LANGUAGES = ['tr', 'en'] as const;
 
+// Customer Segment Definitions
+export const CUSTOMER_SEGMENT_DEFINITIONS = {
+  A1_SOLO_MARKA: {
+    id: 'A1_SOLO_MARKA',
+    code: 'A1',
+    labelTR: 'SoloMarka (Tek Şube Marka)',
+    labelEN: 'SoloBrand (Single Branch Brand)',
+    descriptionTR: 'Tek mağazası var, henüz şubeleşmedi. Erken düzen müşterisi.',
+    descriptionEN: 'Single store, not yet branched. Early-stage organization customer.',
+    focusTR: 'Evrak, gider, tedarik, yapılacaklar — erken düzen.',
+    focusEN: 'Documents, expenses, supply, todos — early organization.',
+  },
+  A2_KENDI_ZINCIRI: {
+    id: 'A2_KENDI_ZINCIRI',
+    code: 'A2',
+    labelTR: 'KendiZinciri (Kendi Sermayesiyle Şubeleşen)',
+    labelEN: 'OwnChain (Self-funded Multi-Branch)',
+    descriptionTR: 'Franchise vermeden, kendi mağazalarıyla büyüyen marka.',
+    descriptionEN: 'Brand growing with its own stores without franchising.',
+    focusTR: 'Kira sözleşmeleri, kritik tarihler, AVM süreçleri, açılış projeleri.',
+    focusEN: 'Lease contracts, critical dates, mall processes, opening projects.',
+  },
+  A3_FRANCHISE_ALAN: {
+    id: 'A3_FRANCHISE_ALAN',
+    code: 'A3',
+    labelTR: 'FranchiseAlan (Bağımsız İşletmeci)',
+    labelEN: 'Franchisee (Independent Operator)',
+    descriptionTR: 'Bir markanın franchise\'ını alıp mağaza işletiyor.',
+    descriptionEN: 'Operates a store under a brand\'s franchise.',
+    focusTR: 'Açılış süreci, evrak düzeni, destek talepleri, performans takibi.',
+    focusEN: 'Opening process, document management, support requests, performance tracking.',
+  },
+  A4_FRANCHISE_ALAN_TEDARIK_ZORUNLU: {
+    id: 'A4_FRANCHISE_ALAN_TEDARIK_ZORUNLU',
+    code: 'A4',
+    labelTR: 'FranchiseAlan-TedarikZorunlu (Bağlı Tedarik)',
+    labelEN: 'Franchisee-MandatorySupply (Tied Supply)',
+    descriptionTR: 'Franchise alan ama malzemeyi markadan almak zorunda.',
+    descriptionEN: 'Franchisee required to purchase supplies from the brand.',
+    focusTR: 'Zorunlu ürün listeleri, sipariş/teslimat, uygunluk, maliyet etkisi.',
+    focusEN: 'Mandatory product lists, order/delivery, compliance, cost impact.',
+  },
+  A5_FRANCHISE_VEREN: {
+    id: 'A5_FRANCHISE_VEREN',
+    code: 'A5',
+    labelTR: 'FranchiseVeren (Ağ Kurucu Marka)',
+    labelEN: 'Franchisor (Network Builder Brand)',
+    descriptionTR: 'Franchise vererek büyüyen marka.',
+    descriptionEN: 'Brand growing by granting franchises.',
+    focusTR: 'Aday pipeline, sözleşme süreçleri, açılış onayları, denetim, destek.',
+    focusEN: 'Candidate pipeline, contract processes, opening approvals, audit, support.',
+  },
+  A6_FRANCHISE_VEREN_TEDARIK_ZORUNLU: {
+    id: 'A6_FRANCHISE_VEREN_TEDARIK_ZORUNLU',
+    code: 'A6',
+    labelTR: 'FranchiseVeren-TedarikZorunlu (Kontrollü Tedarik)',
+    labelEN: 'Franchisor-MandatorySupply (Controlled Supply)',
+    descriptionTR: 'Franchise veriyor ve franchisee\'yi kendi tedarikine bağlıyor.',
+    descriptionEN: 'Grants franchises and ties franchisees to own supply chain.',
+    focusTR: 'Uyum takibi + tedarik kuralları + gelir/kârlılık optimizasyonu.',
+    focusEN: 'Compliance tracking + supply rules + revenue/profitability optimization.',
+  },
+} as const;
+
+export type CustomerSegmentId = keyof typeof CUSTOMER_SEGMENT_DEFINITIONS;
+
 // Application Version
 export const APP_VERSION = '0.1.0';
 
