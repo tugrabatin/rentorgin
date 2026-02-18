@@ -8,10 +8,17 @@
 
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api/v1';
+function resolveApiUrl(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') return '/api/v1';
+  return 'http://localhost:3002/api/v1';
+}
+
+const API_URL = resolveApiUrl();
 
 export const apiClient = axios.create({
   baseURL: API_URL,
+  timeout: 8000,
   headers: {
     'Content-Type': 'application/json',
   },
