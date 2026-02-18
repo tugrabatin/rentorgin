@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd apps/web && npm run build",
+  "buildCommand": "cd packages/core-domain && npx tsc --skipLibCheck && cd ../../apps/web && npm run build",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm install",
   "framework": "nextjs",
